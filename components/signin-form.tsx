@@ -6,6 +6,9 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
+import { Spinner } from "./ui/spinner";
+import { toast } from "sonner";
 
 type Inputs = {
   email: string;
@@ -16,12 +19,37 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
+    formState: { isSubmitting },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log(data);
+      toast.success("Login successfully", {
+        action: {
+          label: "Cancel",
+          onClick: () => console.log("Cancel"),
+        },
+      });
+    } catch (error: any) {
+      console.log(error);
+      toast.error("An error occurred", {
+        action: {
+          label: "Cancel",
+          onClick: () => console.log("Cancel"),
+        },
+      });
+    }
+  };
+
+  const onError = (errors: any) => {
+    toast.error(errors?.email?.message || errors?.password?.message || "Validation error", {
+      action: {
+        label: "Cancel",
+        onClick: () => console.log("Cancel"),
+      },
+    });
   };
 
   return (
@@ -32,16 +60,11 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
           <CardDescription>Login with your Google account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit, onError)}>
             <FieldGroup>
               <Field>
                 <Button variant="outline" type="button">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path
-                      d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
-                      fill="currentColor"
-                    />
-                  </svg>
+                  <FcGoogle />
                   Login with Google
                 </Button>
                 <div className="flex items-center gap-2 text-muted-foreground">
@@ -53,11 +76,10 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
+                  {...register("email", { required: "Email is required" })}
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  required
-                  {...register("email")}
                 />
               </Field>
               <Field>
@@ -68,14 +90,18 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
                   </a>
                 </div>
                 <Input
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: { value: 8, message: "Password must be at least 8 characters" },
+                  })}
                   id="password"
                   type="password"
-                  required
-                  {...(register("password"), { minLength: 8 })}
                 />
               </Field>
               <Field>
-                <Button type="submit">Sign in</Button>
+                <Button disabled={isSubmitting} type="submit">
+                  {isSubmitting ? <Spinner /> : "Sign In"}
+                </Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account? <Link href="signup">Sign up</Link>
                 </FieldDescription>
