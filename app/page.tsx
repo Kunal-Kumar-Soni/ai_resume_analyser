@@ -1,3 +1,11 @@
+import Hero from "@/components/Hero";
+import Navbar from "@/components/Navbar";
+
 export default function Home() {
-  return <div>Please log in to continue</div>;
+  return (
+    <div className="p-3">
+      <Navbar />
+      <Hero />
+    </div>
+  );
 }

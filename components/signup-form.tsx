@@ -9,6 +9,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
+import { supabaseClient } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
   name: string;
@@ -24,10 +26,30 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
     formState: { isSubmitting },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const router = useRouter();
+
+  const onSubmit: SubmitHandler<Inputs> = async (formData) => {
     try {
-      if (data?.password !== data?.confirmPassword) {
+      if (formData?.password !== formData?.confirmPassword) {
         toast.error("Passwords do not match", {
+          action: {
+            label: "Cancel",
+            onClick: () => console.log("Cancel"),
+          },
+        });
+        return;
+      }
+      const { data, error } = await supabaseClient.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (data) {
+        router.push("/");
+      }
+
+      if (error) {
+        toast.error(error?.message || "An error occurred", {
           action: {
             label: "Cancel",
             onClick: () => console.log("Cancel"),
@@ -128,7 +150,10 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                       type="password"
                       {...register("confirmPassword", {
                         required: true,
-                        minLength: { value: 8, message: "Password must be at least 8 characters" },
+                        minLength: {
+                          value: 8,
+                          message: "Confirm Password must be at least 8 characters",
+                        },
                       })}
                       required
                     />

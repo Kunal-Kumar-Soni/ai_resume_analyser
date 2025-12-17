@@ -9,6 +9,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
+import { supabaseClient } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
   email: string;
@@ -22,10 +24,29 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
     formState: { isSubmitting },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const router = useRouter();
+
+  const onSubmit: SubmitHandler<Inputs> = async (formData) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(data);
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (data) {
+        router.push("/");
+      }
+
+      if (error) {
+        toast.error(error?.message || "An error occurred", {
+          action: {
+            label: "Cancel",
+            onClick: () => console.log("Cancel"),
+          },
+        });
+        return;
+      }
+
       toast.success("Login successfully", {
         action: {
           label: "Cancel",
