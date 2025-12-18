@@ -28,66 +28,78 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 
   const router = useRouter();
 
+  //get error message from supabase auth error
+  const getSignupErrorMessage = (error: any) => {
+    const msg = error?.message?.toLowerCase() || "";
+
+    if (msg.includes("already registered")) return "Email already registered";
+
+    if (msg.includes("password")) return "Password is too weak";
+
+    return "Unable to create account. Try again";
+  };
+
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
-    try {
-      if (formData?.password !== formData?.confirmPassword) {
-        toast.error("Passwords do not match", {
-          action: {
-            label: "Cancel",
-            onClick: () => console.log("Cancel"),
-          },
-        });
-        return;
-      }
-      const { data, error } = await supabaseClient.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-      });
-
-      if (data) {
-        router.push("/");
-      }
-
-      if (error) {
-        toast.error(error?.message || "An error occurred", {
-          action: {
-            label: "Cancel",
-            onClick: () => console.log("Cancel"),
-          },
-        });
-        return;
-      }
-      //successfully toast
-      toast.success("Account created successfully", {
+    if (formData?.password !== formData?.confirmPassword) {
+      const toastId = toast.error("Passwords do not match", {
         action: {
           label: "Cancel",
-          onClick: () => console.log("Cancel"),
+          onClick: () => toast.dismiss(toastId),
         },
       });
-    } catch (error: any) {
-      toast.error(error?.message || "An error occurred", {
-        action: {
-          label: "Cancel",
-          onClick: () => console.log("Cancel"),
-        },
-      });
+      return;
     }
+
+    const { error } = await supabaseClient.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+    });
+
+    if (error) {
+      const toastId = toast.error(getSignupErrorMessage(error), {
+        action: {
+          label: "Cancel",
+          onClick: () => toast.dismiss(toastId),
+        },
+      });
+      return;
+    }
+
+    const toastId = toast.success("Account created successfully", {
+      action: {
+        label: "Cancel",
+        onClick: () => toast.dismiss(toastId),
+      },
+    });
+
+    router.push("/");
   };
 
   const onError = (errors: any) => {
-    toast.error(
-      errors?.name?.message ||
-        errors?.email?.message ||
+    const toastId = toast.error(
+      errors?.email?.message ||
         errors?.password?.message ||
         errors?.confirmPassword?.message ||
-        "Validation error",
+        "Validation errorconst toastId = ",
       {
         action: {
           label: "Cancel",
-          onClick: () => console.log("Cancel"),
+          onClick: () => toast.dismiss(toastId),
         },
       }
     );
+  };
+
+  const handleGoogleSignup = async () => {
+    const { error } = await supabaseClient.auth.signInWithOAuth({ provider: "google" });
+    if (error) {
+      const toastId = toast.error("Google login failed", {
+        action: {
+          label: "Cancel",
+          onClick: () => toast.dismiss(toastId),
+        },
+      });
+    }
   };
 
   return (
@@ -101,7 +113,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
           <form onSubmit={handleSubmit(onSubmit, onError)}>
             <FieldGroup>
               <Field>
-                <Button variant="outline" type="button">
+                <Button onClick={handleGoogleSignup} variant="outline" type="button">
                   <FcGoogle />
                   Login with Google
                 </Button>
@@ -111,15 +123,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                   <span className="flex-1 bg-border h-px" />
                 </div>
               </Field>
-              <Field>
-                <FieldLabel htmlFor="name">Full Name</FieldLabel>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="John Doe"
-                  {...register("name", { required: "Name is required" })}
-                />
-              </Field>
+
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input

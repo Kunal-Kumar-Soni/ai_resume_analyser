@@ -26,51 +26,71 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
 
   const router = useRouter();
 
+  //get error message from supabase auth error
+  const getAuthErrorMessage = (error: any) => {
+    if (!error) return "Something went wrong. Please try again.";
+
+    const message = error.message?.toLowerCase() || "";
+
+    if (message.includes("invalid login credentials")) return "Invalid email or password";
+
+    if (message.includes("email not confirmed")) return "Please verify your email first";
+
+    if (message.includes("too many requests")) return "Too many attempts. Try again later";
+
+    if (error.status === 429) return "Too many attempts. Try again later";
+
+    return "Login failed. Please try again.";
+  };
+
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
-    try {
-      const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      });
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email: formData.email,
+      password: formData.password,
+    });
 
-      if (data) {
-        router.push("/");
-      }
-
-      if (error) {
-        toast.error(error?.message || "An error occurred", {
-          action: {
-            label: "Cancel",
-            onClick: () => console.log("Cancel"),
-          },
-        });
-        return;
-      }
-
-      toast.success("Login successfully", {
+    if (error) {
+      const toastId = toast.error(getAuthErrorMessage(error), {
         action: {
           label: "Cancel",
-          onClick: () => console.log("Cancel"),
+          onClick: () => toast.dismiss(toastId),
         },
       });
-    } catch (error: any) {
-      console.log(error);
-      toast.error("An error occurred", {
-        action: {
-          label: "Cancel",
-          onClick: () => console.log("Cancel"),
-        },
-      });
+      return;
     }
+
+    const toastId = toast.success("Login successfully", {
+      action: {
+        label: "Cancel",
+        onClick: () => toast.dismiss(toastId),
+      },
+    });
+
+    router.push("/");
   };
 
   const onError = (errors: any) => {
-    toast.error(errors?.email?.message || errors?.password?.message || "Validation error", {
-      action: {
-        label: "Cancel",
-        onClick: () => console.log("Cancel"),
-      },
-    });
+    const toastId = toast.error(
+      errors?.email?.message || errors?.password?.message || "Validation error",
+      {
+        action: {
+          label: "Cancel",
+          onClick: () => toast.dismiss(toastId),
+        },
+      }
+    );
+  };
+
+  const handleGoogleSignup = async () => {
+    const { error } = await supabaseClient.auth.signInWithOAuth({ provider: "google" });
+    if (error) {
+      const toastId = toast.error("Google login failed", {
+        action: {
+          label: "Cancel",
+          onClick: () => toast.dismiss(toastId),
+        },
+      });
+    }
   };
 
   return (
@@ -84,7 +104,7 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
           <form onSubmit={handleSubmit(onSubmit, onError)}>
             <FieldGroup>
               <Field>
-                <Button variant="outline" type="button">
+                <Button onClick={handleGoogleSignup} variant="outline" type="button">
                   <FcGoogle />
                   Login with Google
                 </Button>
@@ -106,9 +126,6 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
               <Field>
                 <div className="flex items-center">
                   <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <a href="#" className="ml-auto text-sm hover:underline underline-offset-4">
-                    Forgot your password?
-                  </a>
                 </div>
                 <Input
                   {...register("password", {

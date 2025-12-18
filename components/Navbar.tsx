@@ -19,19 +19,23 @@ const Navbar = () => {
   const handleSignout = async () => {
     const { error } = await supabaseClient.auth.signOut();
     if (!error) {
-      toast.success("Signed out successfully", {
+      const toastId = toast.success("Signed out successfully", {
         action: {
           label: "Cancel",
-          onClick: () => console.log("Cancel"),
+          onClick: () => {
+            toast.dismiss(toastId);
+          },
         },
       });
     }
 
     if (error) {
-      toast.error(error?.message || "An error occurred", {
+      const toastId = toast.error(error?.message || "An error occurred", {
         action: {
           label: "Cancel",
-          onClick: () => console.log("Cancel"),
+          onClick: () => {
+            toast.dismiss(toastId);
+          },
         },
       });
       return;
