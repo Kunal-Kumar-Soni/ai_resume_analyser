@@ -70,7 +70,7 @@ const ReviewCard = ({
 export default function Testimonials() {
   return (
     <div className="relative flex flex-col justify-center items-center mx-auto my-10 max-w-7xl overflow-hidden">
-      <h2 className="mb-4 font-plusJakartaSans font-black text-3xl md:text-5xl tracking-tighter">
+      <h2 className="mb-15 font-plusJakartaSans font-black text-3xl md:text-5xl tracking-tighter">
         What Our User <span className="text-primary">Say</span>
       </h2>
       <Marquee pauseOnHover className="[--duration:30s]">

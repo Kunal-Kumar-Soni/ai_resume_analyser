@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,8 +11,28 @@ import {
   CheckCircle2,
   TrendingUp,
 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const Hero = () => {
+  const router = useRouter();
+  const { user } = useAuth();
+  const getStarted = () => {
+    if (!user) {
+      const toastId = toast.warning("Please login to continue", {
+        action: {
+          label: "Cancel",
+          onClick: () => {
+            toast.dismiss(toastId);
+          },
+        },
+      });
+    } else {
+      router.push("/result");
+    }
+  };
+
   return (
     <section className="relative bg-background pt-2 md:pt-8 :pb-32 overflow-hidden">
       {/* Dynamic Background Glows */}
@@ -48,14 +69,15 @@ const Hero = () => {
               </p>
             </div>
 
-            {/* Main Action Button */}
+            {/* Main Get Started Button */}
             <div className="w-full sm:w-auto">
               <Button
+                onClick={getStarted}
                 size="lg"
                 className="group relative shadow-2xl shadow-primary/20 hover:shadow-primary/40 px-10 rounded-2xl w-full sm:w-auto h-16 overflow-hidden font-bold text-lg active:scale-95 transition-all hover:-translate-y-1"
               >
                 <span className="z-10 relative flex items-center">
-                  Get Started for Free{" "}
+                  Get Started for Free
                   <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
                 </span>
                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent transition-transform -translate-x-full group-hover:translate-x-full duration-1000" />

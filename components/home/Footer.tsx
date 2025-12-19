@@ -65,7 +65,7 @@ const Footer = () => {
         {/* Bottom Copyright */}
         <div className="flex md:flex-row flex-col justify-between items-center gap-4 mt-12 pt-8 border-border/20 border-t">
           <p className="font-medium text-muted-foreground/60 text-xs">
-            © 2025 ResumeAI. All rights reserved.
+            © {new Date().getFullYear()} ResumeAI. All rights reserved.
           </p>
           <div className="flex items-center gap-2">
             <div className="bg-green-500 rounded-full w-2 h-2 animate-pulse" />

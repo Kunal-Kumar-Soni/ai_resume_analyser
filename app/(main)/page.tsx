@@ -15,12 +15,10 @@ export default function Home() {
 
   return (
     <div className="animate-in duration-700 fade-in">
-      <Navbar />
       <Hero />
       <Security />
       <Works />
       <Testimonials />
-      <Footer />
     </div>
   );
 }
