@@ -34,7 +34,7 @@ const Works = () => {
 
       <div className="mx-auto px-6 max-w-7xl">
         <div className="mb-16 text-center">
-          <h2 className="mb-4 font-black text-3xl md:text-5xl tracking-tighter">
+          <h2 className="mb-4 font-plusJakartaSans font-black text-3xl md:text-5xl tracking-tighter">
             How It <span className="text-primary">Works</span>
           </h2>
           <p className="mx-auto max-w-2xl font-medium text-muted-foreground text-lg">
@@ -51,9 +51,9 @@ const Works = () => {
               key={step.id}
               className="group relative bg-card/50 hover:bg-card hover:shadow-2xl hover:shadow-primary/10 backdrop-blur-xl border-border/50 rounded-[2.5rem] overflow-hidden transition-all hover:-translate-y-2 duration-500"
             >
-              <CardHeader className="z-10 relative pt-10">
+              <CardHeader className="z-10 relative">
                 {/* Step Number Badge */}
-                <div className="top-6 right-8 absolute font-black text-primary/5 group-hover:text-primary/10 text-6xl transition-colors pointer-events-none">
+                <div className="right-8 absolute font-black text-primary/5 group-hover:text-primary/10 text-6xl transition-colors pointer-events-none">
                   0{step.id}
                 </div>
 
@@ -62,12 +62,12 @@ const Works = () => {
                   {step.icon}
                 </div>
 
-                <CardTitle className="font-bold text-foreground text-xl tracking-tight">
+                <CardTitle className="font-plusJakartaSans font-bold text-foreground text-xl tracking-tight">
                   {step.title}
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="z-10 relative pb-10 text-muted-foreground text-sm leading-relaxed">
+              <CardContent className="z-10 relative pb-10 font-inter text-md text-muted-foreground leading-relaxed">
                 {step.description}
               </CardContent>
 

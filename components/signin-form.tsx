@@ -2,17 +2,19 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
-import { Spinner } from "./ui/spinner";
+import { SpinnerCustom } from "./ui/spinner";
 import { toast } from "sonner";
 import { supabaseClient } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { useAuth } from "@/hooks/useAuth";
+import { useEffect } from "react";
+import PageLoader from "./ui/custom-animated-loader";
 
 type Inputs = {
   email: string;
@@ -96,14 +98,24 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
     }
   };
 
+  useEffect(() => {
+    if (user && !isLoading) {
+      router.replace("/");
+    }
+  }, [user]);
+
+  //for loading purpose
+  if (isLoading) {
+    return <PageLoader />;
+  }
   if (user) {
-    router.push("/");
+    return <PageLoader />;
   }
 
   return (
     <div
       className={cn(
-        "flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 w-full min-h-full",
+        "flex flex-col justify-center items-center my-6 md:my-0 px-4 sm:px-6 lg:px-8 w-full min-h-full",
         className
       )}
       {...props}
@@ -159,10 +171,12 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
 
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
-              <span className="border-muted/60 border-t w-full" />
+              <span className="border-muted-foreground/40 dark:border-muted-foreground/70 border-t w-full" />
             </div>
             <div className="relative flex justify-center font-bold text-[10px] uppercase tracking-[0.3em]">
-              <span className="bg-background px-4 text-muted-foreground/60">or email access</span>
+              <span className="bg-white dark:bg-background px-4 text-muted-foreground dark:text-muted-foreground/70">
+                or email access
+              </span>
             </div>
           </div>
 
@@ -212,7 +226,7 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
               type="submit"
               className="shadow-primary/20 shadow-xl rounded-2xl w-full h-14 font-bold text-sm sm:text-base uppercase tracking-widest active:scale-[0.98] transition-all hover:-translate-y-1"
             >
-              {isSubmitting ? <Spinner /> : "Sign In Now"}
+              {isSubmitting ? <SpinnerCustom /> : "Sign In Now"}
             </Button>
           </form>
 
@@ -229,14 +243,6 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
           </div>
         </CardContent>
       </Card>
-
-      <footer className="flex flex-wrap justify-center gap-x-6 gap-y-2 opacity-50 mt-8 font-bold text-[10px] text-muted-foreground uppercase tracking-widest">
-        <span>Privacy Secured</span>
-        <span>•</span>
-        <span>AI Optimized</span>
-        <span>•</span>
-        <span>Encrypted Data</span>
-      </footer>
     </div>
   );
 }

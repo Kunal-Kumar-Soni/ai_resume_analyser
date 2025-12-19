@@ -70,7 +70,9 @@ const ReviewCard = ({
 export default function Testimonials() {
   return (
     <div className="relative flex flex-col justify-center items-center mx-auto my-10 max-w-7xl overflow-hidden">
-      <h2 className="mb-16 font-bold text-4xl text-center tracking-tight">What Our Users Say</h2>
+      <h2 className="mb-4 font-plusJakartaSans font-black text-3xl md:text-5xl tracking-tighter">
+        What Our User <span className="text-primary">Say</span>
+      </h2>
       <Marquee pauseOnHover className="[--duration:30s]">
         {reviews.map((review) => (
           <ReviewCard key={review.username} {...review} />

@@ -36,7 +36,7 @@ const Security = () => {
       <div className="mx-auto p-6 max-w-7xl">
         {/* Section Heading */}
         <div className="mb-16 text-center">
-          <h2 className="mb-4 font-black text-3xl md:text-5xl tracking-tighter">
+          <h2 className="mb-4 font-plusJakartaSans font-black text-3xl md:text-5xl tracking-tighter">
             Bank-Level <span className="text-primary">Security</span>
           </h2>
           <p className="mx-auto max-w-2xl text-muted-foreground text-lg">
@@ -55,11 +55,11 @@ const Security = () => {
                 <div className="flex justify-center items-center bg-primary/10 group-hover:bg-primary mb-4 rounded-2xl w-14 h-14 text-primary group-hover:text-primary-foreground transition-colors duration-300">
                   {step.icon}
                 </div>
-                <CardTitle className="font-bold text-foreground text-xl tracking-tight">
+                <CardTitle className="font-plusJakartaSans font-bold text-foreground text-xl tracking-tight">
                   {step.title}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="z-10 relative text-muted-foreground leading-relaxed">
+              <CardContent className="z-10 relative font-inter text-muted-foreground leading-relaxed">
                 {step.description}
               </CardContent>
 

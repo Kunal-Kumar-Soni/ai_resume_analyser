@@ -55,7 +55,7 @@ const Navbar = () => {
           <div className="flex items-center gap-3">
             <AnimatedThemeToggler duration={600} />
 
-            <div className="hidden sm:block mx-2 bg-border w-px h-6" />
+            <div className="hidden sm:block bg-muted-foreground/30 dark:bg-muted-foreground/50 mx-2 w-px h-6" />
 
             {user && !isLoading ? (
               <div className="flex items-center gap-4">
