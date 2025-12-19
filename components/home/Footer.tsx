@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="bottom-0 left-1/2 -z-10 absolute w-1/2 h-24 -translate-x-1/2" />
 
       <div className="mx-auto p-6 max-w-7xl">
-        <Separator className="bg-border/50" />
+        <Separator className="border-zinc-200 dark:border-zinc-800" />
 
         <div className="flex md:flex-row flex-col justify-between items-center gap-8 mt-12">
           {/* Brand & Badge */}

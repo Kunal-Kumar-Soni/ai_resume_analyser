@@ -6,10 +6,15 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { AnimatedThemeToggler } from "../ui/animated-theme-toggler";
 import { LogOut } from "lucide-react";
+import { useState } from "react";
+import Image from "next/image";
+import UserProfile from "./UserProfile";
 
 const Navbar = () => {
   const { user, isLoading } = useAuth();
   const router = useRouter();
+  const [imgError, setImgError] = useState(false);
+  const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
 
   const handleSignIn = () => {
     router.push("/signin");
@@ -55,25 +60,10 @@ const Navbar = () => {
           <div className="flex items-center gap-3">
             <AnimatedThemeToggler duration={600} />
 
-            <div className="hidden sm:block bg-muted-foreground/30 dark:bg-muted-foreground/50 mx-2 w-px h-6" />
+            <div className="block bg-muted-foreground/30 dark:bg-muted-foreground/50 mx-1 sm:mx-2 w-px h-6" />
 
             {user && !isLoading ? (
-              <div className="flex items-center gap-4">
-                {/* User Avatar Circle */}
-                <div className="flex justify-center items-center bg-white/90 dark:bg-white/10 shadow-sm border border-gray-200 dark:border-white/10 rounded-full w-10 h-10 font-bold text-primary transition-none">
-                  {user?.email?.[0]?.toUpperCase()}
-                </div>
-
-                <Button
-                  variant="ghost"
-                  title="sign out"
-                  onClick={handleSignout}
-                  className="group flex items-center gap-2 bg-white/90 hover:bg-gray-50/80 dark:bg-white/10 dark:hover:bg-white/15 shadow-sm hover:shadow-md px-4 border border-gray-200 hover:border-primary/30 dark:border-white/10 rounded-xl h-10 font-bold text-foreground/90 hover:text-primary active:scale-95 transition-all duration-300"
-                >
-                  <span className="hidden md:block text-sm">Sign Out</span>
-                  <LogOut className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </Button>
-              </div>
+              <UserProfile />
             ) : (
               <Button
                 title="sign in"
