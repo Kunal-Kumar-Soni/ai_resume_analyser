@@ -1,8 +1,6 @@
 "use client";
-import { HiDocumentText } from "react-icons/hi";
 import { Button } from "../ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { useEffect } from "react";
 import { supabaseClient } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -27,7 +25,12 @@ const Navbar = () => {
         },
       });
     } else {
-      toast.error(error?.message || "An error occurred");
+      const toastId = toast.error("Logout failed. Please try again.", {
+        action: {
+          label: "Cancel",
+          onClick: () => toast.dismiss(toastId),
+        },
+      });
     }
   };
 
@@ -42,8 +45,8 @@ const Navbar = () => {
           <div className="flex justify-center items-center bg-primary rounded-lg w-9 h-9 group-hover:scale-110 transition-transform">
             <span className="font-black text-white dark:text-black text-xl italic">R</span>
           </div>
-          <span className="font-black text-2xl tracking-tighter">
-            Resume<span className="text-primary">AI</span>
+          <span className="font-black text-2xl italic tracking-tighter">
+            Resume<span className="text-primary not-italic">.AI</span>
           </span>
         </div>
 
@@ -57,21 +60,23 @@ const Navbar = () => {
             {user && !isLoading ? (
               <div className="flex items-center gap-4">
                 {/* User Avatar Circle */}
-                <div className="flex justify-center items-center bg-primary/10 shadow-sm border border-primary/20 rounded-full w-10 h-10 font-bold text-primary">
+                <div className="flex justify-center items-center bg-white/90 dark:bg-white/10 shadow-sm border border-gray-200 dark:border-white/10 rounded-full w-10 h-10 font-bold text-primary transition-none">
                   {user?.email?.[0]?.toUpperCase()}
                 </div>
 
                 <Button
                   variant="ghost"
+                  title="sign out"
                   onClick={handleSignout}
-                  className="group flex items-center gap-2 hover:bg-destructive/5 px-4 rounded-xl h-10 font-bold text-muted-foreground hover:text-destructive text-sm transition-all duration-300"
+                  className="group flex items-center gap-2 bg-white/90 hover:bg-gray-50/80 dark:bg-white/10 dark:hover:bg-white/15 shadow-sm hover:shadow-md px-4 border border-gray-200 hover:border-primary/30 dark:border-white/10 rounded-xl h-10 font-bold text-foreground/90 hover:text-primary active:scale-95 transition-all duration-300"
                 >
-                  <span>Sign Out</span>
-                  <LogOut className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                  <span className="hidden md:block text-sm">Sign Out</span>
+                  <LogOut className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </div>
             ) : (
               <Button
+                title="sign in"
                 onClick={handleSignIn}
                 className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 px-6 rounded-xl font-bold text-white dark:text-black active:scale-95 transition-all"
               >

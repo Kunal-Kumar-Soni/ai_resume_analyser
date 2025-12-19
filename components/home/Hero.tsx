@@ -13,7 +13,7 @@ import {
 
 const Hero = () => {
   return (
-    <section className="relative bg-background pt-10 md:pt-15 :pb-32 overflow-hidden">
+    <section className="relative bg-background pt-2 md:pt-8 :pb-32 overflow-hidden">
       {/* Dynamic Background Glows */}
       <div className="top-0 left-1/2 -z-10 absolute w-full h-full -translate-x-1/2">
         <div className="top-[-10%] left-[-10%] absolute rounded-full w-125 h-125 animate-pulse" />

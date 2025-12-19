@@ -28,7 +28,7 @@ const Works = () => {
   ];
 
   return (
-    <section className="relative py-24 w-full overflow-hidden">
+    <section className="relative py-10 md:py-15 w-full overflow-hidden">
       {/* Background decoration - matching Hero/Security */}
       <div className="top-0 right-1/4 -z-10 absolute rounded-full w-96 h-96" />
 

@@ -18,8 +18,8 @@ const Footer = () => {
               <div className="flex justify-center items-center bg-primary rounded-lg w-8 h-8">
                 <span className="font-black text-white dark:text-black text-xl italic">R</span>
               </div>
-              <span className="font-black text-2xl tracking-tighter">
-                Resume<span className="text-primary">AI</span>
+              <span className="font-black text-2xl italic tracking-tighter">
+                Resume<span className="text-primary not-italic">.AI</span>
               </span>
             </div>
             <p className="max-w-xs text-muted-foreground text-sm md:text-left text-center">
@@ -33,9 +33,6 @@ const Footer = () => {
               Terms
             </a>
             <a href="#" className="hover:text-primary transition-colors duration-200">
-              Pricing
-            </a>
-            <a href="#" className="hover:text-primary transition-colors duration-200">
               Privacy
             </a>
             <a href="#" className="hover:text-primary transition-colors duration-200">
@@ -46,12 +43,16 @@ const Footer = () => {
           {/* Social Icons - Circle Style */}
           <div className="flex items-center gap-4">
             {[
-              { icon: <FaLinkedin size={18} />, href: "#" },
-              { icon: <FaGithub size={18} />, href: "#" },
-              { icon: <FaXTwitter size={18} />, href: "#" },
+              {
+                icon: <FaLinkedin size={18} />,
+                href: "https://www.linkedin.com/in/kunal-kumar-soni/",
+              },
+              { icon: <FaGithub size={18} />, href: "https://github.com/Kunal-Kumar-Soni" },
+              { icon: <FaXTwitter size={18} />, href: "https://x.com/KunalKumar_Soni" },
             ].map((social, idx) => (
               <a
                 key={idx}
+                target="_blank"
                 href={social.href}
                 className="flex justify-center items-center bg-card/50 hover:bg-primary/5 border border-border/50 hover:border-primary/30 rounded-full w-10 h-10 text-muted-foreground hover:text-primary transition-all duration-300"
               >

@@ -50,9 +50,9 @@ const ReviewCard = ({
       className={cn(
         "relative p-4 border rounded-xl w-64 h-full overflow-hidden cursor-pointer",
         // light styles
-        "border-gray-950/10 bg-card/70 hover:bg-card ",
+        "border-gray-950/10 bg-card/10 hover:bg-gray-950/5",
         // dark styles
-        "dark:border-gray-50/10 bg-card/70 hover:bg-card"
+        "dark:border-gray-50/10 dark:bg-card/70 dark:hover:bg-gray-50/8"
       )}
     >
       <blockquote className="mb-6 text-sm">"{body}"</blockquote>

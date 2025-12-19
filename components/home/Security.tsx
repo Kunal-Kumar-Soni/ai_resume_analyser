@@ -27,7 +27,7 @@ const Security = () => {
   ];
 
   return (
-    <section className="relative py-24 w-full overflow-hidden">
+    <section className="relative py-10 md:py-15 w-full overflow-hidden">
       {/* Background decoration to match Hero */}
       <div className="top-1/2 left-1/2 -z-10 absolute w-full h-full -translate-x-1/2 -translate-y-1/2">
         <div className="top-0 right-0 absolute rounded-full w-[30%] h-[30%]" />
