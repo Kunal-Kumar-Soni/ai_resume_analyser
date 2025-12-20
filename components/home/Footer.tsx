@@ -1,6 +1,7 @@
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { Separator } from "../ui/separator";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -29,15 +30,18 @@ const Footer = () => {
 
           {/* Navigation Links */}
           <div className="flex items-center gap-10 font-semibold text-muted-foreground text-sm">
-            <a href="#" className="hover:text-primary transition-colors duration-200">
+            <Link
+              href="/termsandcondition"
+              className="hover:text-primary transition-colors duration-200"
+            >
               Terms
-            </a>
-            <a href="#" className="hover:text-primary transition-colors duration-200">
+            </Link>
+            <Link href="/privacy" className="hover:text-primary transition-colors duration-200">
               Privacy
-            </a>
-            <a href="#" className="hover:text-primary transition-colors duration-200">
+            </Link>
+            <Link href="/contact" className="hover:text-primary transition-colors duration-200">
               Contact
-            </a>
+            </Link>
           </div>
 
           {/* Social Icons - Circle Style */}
