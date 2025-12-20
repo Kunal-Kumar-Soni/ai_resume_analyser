@@ -35,7 +35,6 @@ export default function UserProfile() {
       });
     }
   };
-  console.log(user);
 
   return (
     <Popover>

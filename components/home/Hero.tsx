@@ -29,7 +29,7 @@ const Hero = () => {
         },
       });
     } else {
-      router.push("/fileshare");
+      router.replace("/fileshare");
     }
   };
 

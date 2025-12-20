@@ -1,8 +1,17 @@
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
+import { toast } from "sonner";
 
 const PDF_WORKER_URL = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
 export const getPDFText = async (file: File): Promise<string> => {
+  if (!file) {
+    const toastId = toast.error("No File found.", {
+      action: {
+        label: "Cancel",
+        onClick: () => toast.dismiss(toastId),
+      },
+    });
+  }
   try {
     const arrayBuffer = await file.arrayBuffer();
 
@@ -26,6 +35,12 @@ export const getPDFText = async (file: File): Promise<string> => {
 
     return fullText;
   } catch (error) {
-    throw new Error("Parsing Failed Try Again!");
+    const toastId = toast.error("Parsing Failed Try Again!", {
+      action: {
+        label: "Cancel",
+        onClick: () => toast.dismiss(toastId),
+      },
+    });
+    return "";
   }
 };

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
-import { SpinnerCustom } from "./ui/spinner";
+import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
 import { supabaseClient } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
@@ -77,7 +77,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
       },
     });
 
-    router.push("/");
+    router.replace("/");
   };
 
   const onError = (errors: any) => {
@@ -263,7 +263,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                 type="submit"
                 className="shadow-primary/20 shadow-xl rounded-2xl w-full h-14 font-bold text-sm sm:text-base uppercase tracking-widest active:scale-[0.98] transition-all hover:-translate-y-1"
               >
-                {isSubmitting ? <SpinnerCustom /> : "Create Account"}
+                {isSubmitting ? <Spinner className="w-6 h-6" /> : "Create Account"}
               </Button>
 
               <p className="font-medium text-muted-foreground text-sm text-center">

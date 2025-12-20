@@ -12,20 +12,29 @@ import {
   FileCheck2,
   X,
   History,
+  ArrowLeft,
+  Download,
+  Share2,
 } from "lucide-react";
 import { getPDFText } from "@/lib/getPDFText";
 import PageLoader from "@/components/ui/custom-animated-loader";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { generateAiResume } from "@/actions/resume";
+import { Spinner } from "@/components/ui/spinner";
+import { useAnalysis } from "@/hooks/useAnalysis";
+import { toast } from "sonner";
 
 const PDFUploadSleek = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [isParsing, setIsParsing] = useState(false);
-  const [extractedText, setExtractedText] = useState("");
-  const [jobDescription, setJobDescription] = useState("");
-  const [isDragging, setIsDragging] = useState(false);
+  const [isParsing, setIsParsing] = useState<boolean>(false);
+  const [extractedText, setExtractedText] = useState<string>("");
+  const [jobDescription, setJobDescription] = useState<string>("");
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const { user, isLoading } = useAuth();
+  const { analysisData, setAnalysisData, isAnalysisDataLoading, setIsAnalysisDataLoading } =
+    useAnalysis();
   const router = useRouter();
 
   // --- Common Logic for File Processing ---
@@ -37,6 +46,16 @@ const PDFUploadSleek = () => {
 
     try {
       const text = await getPDFText(selectedFile);
+      if (text.trim() === "") {
+        const toastId = toast.error("No text found in PDF.", {
+          action: {
+            label: "Cancel",
+            onClick: () => toast.dismiss(toastId),
+          },
+        });
+        setFile(null);
+        return;
+      }
       setExtractedText(text);
     } catch (err) {
       setFile(null);
@@ -74,37 +93,73 @@ const PDFUploadSleek = () => {
     setExtractedText("");
   };
 
+  // Execute Analysis
+  const handleExecuteAnalysis = async () => {
+    if (!extractedText) return;
+
+    setIsAnalysisDataLoading(true);
+
+    try {
+      const res = await generateAiResume(extractedText, jobDescription);
+
+      if (res.success) {
+        setAnalysisData(res.output);
+        setIsAnalysisDataLoading(false);
+        router.replace("fileshare/analysis-result");
+      } else {
+        const toastId = toast.error(res?.error, {
+          action: {
+            label: "Cancel",
+            onClick: () => toast.dismiss(toastId),
+          },
+        });
+        setIsAnalysisDataLoading(false);
+      }
+    } catch (error) {
+      const toastId = toast.error("Execution failed. Please try again.", {
+        action: {
+          label: "Cancel",
+          onClick: () => toast.dismiss(toastId),
+        },
+      });
+      setIsAnalysisDataLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!user && !isLoading) {
-      router.push("/");
+      router.replace("/");
     }
   }, [user, isLoading, router]);
 
-  if (isLoading || !user) return <PageLoader />;
+  if (isLoading || !user || (isAnalysisDataLoading && !analysisData)) {
+    return <PageLoader />;
+  }
 
   return (
     <div className="selection:bg-zinc-200 dark:selection:bg-zinc-800 mx-auto max-w-7xl min-h-screen text-zinc-900 dark:text-zinc-100 transition-colors duration-500">
-      {/* Background Subtle Grid - Sirf CSS se */}
-      <div
-        className="z-0 fixed inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none"
-        style={{
-          backgroundImage: `radial-gradient(#000 1px, transparent 0)`,
-          backgroundSize: "24px 24px",
-        }}
-      ></div>
-
       <div className="z-10 relative space-y-12 mx-auto p-6 max-w-350">
-        {/* --- TOP NAVIGATION BAR --- */}
-        <nav className="flex justify-between items-center pb-8 border-zinc-200 dark:border-zinc-800 border-b">
+        {/* --- 1. TOP MOST BACK ACTION --- */}
+        <div className="mb-6">
+          <button
+            onClick={() => router.replace("/")}
+            className="group flex items-center gap-2 font-bold text-[10px] text-zinc-400 hover:text-black dark:hover:text-white uppercase tracking-[0.2em] transition-all"
+          >
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+            Back to Home
+          </button>
+        </div>
+
+        {/* --- 2. MAIN NAVIGATION (Gemini Logo) --- */}
+        <nav className="flex justify-between items-center mb-12 pb-8 border-zinc-200 dark:border-zinc-800 border-b">
           <div className="flex items-center gap-4">
-            {/* Gemini Inspired Icon Box */}
             <div className="group relative flex justify-center items-center bg-black dark:bg-white shadow-2xl rounded-xl w-10 h-10 overflow-hidden">
               <Sparkles className="z-10 relative w-6 h-6 text-white dark:text-black" />
               <div className="absolute inset-0 bg-linear-to-tr from-blue-500/20 via-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
 
             <div>
-              <h2 className="flex items-center gap-2 font-plusJakartaSans font-bold text-sm uppercase tracking-tight">
+              <h2 className="flex items-center gap-2 font-bold text-sm uppercase tracking-tight">
                 Gemini
               </h2>
               <p className="flex items-center gap-1 font-black text-[9px] text-zinc-400 uppercase tracking-[0.3em]">
@@ -217,7 +272,15 @@ const PDFUploadSleek = () => {
                       <p className="mb-1 font-black text-zinc-400 text-xs uppercase tracking-[0.2em]">
                         Source File
                       </p>
-                      <h4 className="font-bold text-xl">{file.name}</h4>
+                      <h4 className="font-bold text-xl">
+                        {isParsing ? (
+                          <div className="flex justify-center items-center gap-2 text-zinc-400">
+                            <Spinner className="mt-2 w-8 h-8" />
+                          </div>
+                        ) : (
+                          file.name.replace(/\.[^/.]+$/, "")
+                        )}
+                      </h4>
                     </div>
                   </div>
                   <Button
@@ -255,10 +318,12 @@ const PDFUploadSleek = () => {
               </div>
 
               <Button
-                disabled={!file}
+                onClick={handleExecuteAnalysis}
+                disabled={!file || isParsing}
                 className="bg-black dark:bg-white hover:opacity-90 disabled:opacity-20 shadow-xl rounded-[1.8rem] w-full h-16 font-black text-white dark:text-black text-xs uppercase tracking-[0.3em] active:scale-[0.97] transition-all"
               >
-                Execute Analysis <ArrowRight className="ml-2 w-4 h-4" />
+                Execute Analysis
+                <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Card>
 

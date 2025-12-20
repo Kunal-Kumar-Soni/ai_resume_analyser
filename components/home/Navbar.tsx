@@ -17,7 +17,7 @@ const Navbar = () => {
   const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
 
   const handleSignIn = () => {
-    router.push("/signin");
+    router.replace("/signin");
   };
 
   const handleSignout = async () => {
@@ -45,7 +45,7 @@ const Navbar = () => {
         {/* Left: Logo (Footer se match kiya gaya) */}
         <div
           className="group flex items-center gap-2 cursor-pointer"
-          onClick={() => router.push("/")}
+          onClick={() => router.replace("/")}
         >
           <div className="flex justify-center items-center bg-primary rounded-lg w-9 h-9 group-hover:scale-110 transition-transform">
             <span className="font-black text-white dark:text-black text-xl italic">R</span>

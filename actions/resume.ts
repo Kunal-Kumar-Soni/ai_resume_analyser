@@ -5,11 +5,8 @@ import { GoogleGenAI } from "@google/genai";
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY as string });
 
-export async function generateAiResume(formData: FormData) {
+export async function generateAiResume(resumeText: string, jobDescription: string) {
   try {
-    const resumeText = formData.get("resumeText") as string;
-    const jobDescription = formData.get("jobDescription") as string;
-
     const isMatchingTask = jobDescription && jobDescription.trim().length > 0;
 
     // 2. Dynamic Prompt banayein
@@ -46,12 +43,12 @@ export async function generateAiResume(formData: FormData) {
 
     // Initialize the API with your secret key
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash",
       contents: [{ role: "user", parts: [{ text: finalPrompt }] }],
     });
 
     return { success: true, output: response.text };
   } catch (error: any) {
-    return { success: false, error: "AI Generation Failed" };
+    return { success: false, error: "Unable to generate. Please try again" };
   }
 }

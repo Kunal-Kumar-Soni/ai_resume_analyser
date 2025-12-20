@@ -7,10 +7,10 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
-import { SpinnerCustom } from "./ui/spinner";
+import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
 import { supabaseClient } from "@/lib/supabaseClient";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
@@ -71,7 +71,7 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
       },
     });
 
-    router.push("/");
+    router.replace("/");
   };
 
   const onError = (errors: any) => {
@@ -226,7 +226,7 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
               type="submit"
               className="shadow-primary/20 shadow-xl rounded-2xl w-full h-14 font-bold text-sm sm:text-base uppercase tracking-widest active:scale-[0.98] transition-all hover:-translate-y-1"
             >
-              {isSubmitting ? <SpinnerCustom /> : "Sign In Now"}
+              {isSubmitting ? <Spinner className="w-6 h-6" /> : "Sign In Now"}
             </Button>
           </form>
 
