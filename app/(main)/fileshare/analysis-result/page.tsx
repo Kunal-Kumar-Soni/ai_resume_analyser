@@ -6,25 +6,24 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download, Sparkles } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import PageLoader from "@/components/ui/custom-animated-loader";
+import { useAuth } from "@/hooks/useAuth";
 
 const AnalysisResult = () => {
   const { analysisData } = useAnalysis();
+  const { user, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!analysisData) {
+    if (!analysisData || !user) {
       router.replace("/fileshare");
     }
-  }, [analysisData, router]);
+  }, [analysisData, router, user]);
 
-  // if (!shouldRender || !analysisData) {
-  //   return (
-  //     <div className="flex justify-center items-center bg-white dark:bg-[#0a0a0a] w-full h-screen">
-  //       <Sparkles className="w-10 h-10 text-zinc-300 animate-pulse" />
-  //     </div>
-  //   );
-  // }
+  if (!analysisData || isLoading) {
+    return <div className="z-9999 fixed inset-0 h-screen" />;
+  }
 
   return (
     <div className="mx-auto p-6 max-w-7xl min-h-[80vh] text-zinc-900 dark:text-zinc-100 animate-in duration-700 fade-in">
@@ -37,7 +36,7 @@ const AnalysisResult = () => {
               className="group flex items-center gap-2 font-bold text-[10px] text-zinc-400 hover:text-black dark:hover:text-white uppercase tracking-[0.2em] transition-all"
             >
               <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-              Back to Home
+              Back to fileshare
             </button>
             <h1 className="font-black text-4xl lg:text-5xl tracking-tighter">
               Analysis <span className="text-zinc-400 dark:text-zinc-700">Report.</span>

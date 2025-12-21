@@ -13,8 +13,6 @@ import {
   X,
   History,
   ArrowLeft,
-  Download,
-  Share2,
 } from "lucide-react";
 import { getPDFText } from "@/lib/getPDFText";
 import PageLoader from "@/components/ui/custom-animated-loader";
@@ -24,6 +22,7 @@ import { generateAiResume } from "@/actions/resume";
 import { Spinner } from "@/components/ui/spinner";
 import { useAnalysis } from "@/hooks/useAnalysis";
 import { toast } from "sonner";
+import { generateAiResumeFromOpenai } from "@/actions/openAi";
 
 const PDFUploadSleek = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -33,9 +32,12 @@ const PDFUploadSleek = () => {
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const { user, isLoading } = useAuth();
-  const { analysisData, setAnalysisData, isAnalysisDataLoading, setIsAnalysisDataLoading } =
-    useAnalysis();
+  const { setAnalysisData, isAnalysisDataLoading, setIsAnalysisDataLoading } = useAnalysis();
   const router = useRouter();
+
+  useEffect(() => {
+    setIsAnalysisDataLoading(false);
+  }, [setIsAnalysisDataLoading]);
 
   // --- Common Logic for File Processing ---
   const processFile = async (selectedFile: File) => {
@@ -96,15 +98,13 @@ const PDFUploadSleek = () => {
   // Execute Analysis
   const handleExecuteAnalysis = async () => {
     if (!extractedText) return;
-
     setIsAnalysisDataLoading(true);
 
     try {
-      const res = await generateAiResume(extractedText, jobDescription);
-
+      const res = await generateAiResumeFromOpenai(extractedText, jobDescription);
+      // const res = await generateAiResume(extractedText, jobDescription);
       if (res.success) {
         setAnalysisData(res.output);
-        setIsAnalysisDataLoading(false);
         router.replace("fileshare/analysis-result");
       } else {
         const toastId = toast.error(res?.error, {
@@ -132,7 +132,8 @@ const PDFUploadSleek = () => {
     }
   }, [user, isLoading, router]);
 
-  if (isLoading || !user || (isAnalysisDataLoading && !analysisData)) {
+  if (isLoading || !user || isAnalysisDataLoading) {
+    console.log("showing loader");
     return <PageLoader />;
   }
 
