@@ -9,21 +9,21 @@ const Works = () => {
       title: "Upload Resume",
       icon: <LuUpload size={24} />,
       description:
-        "Enhance your career by uploading your resume for an instant AI-powered quality check.",
+        "Simply upload your PDF or DOCX. Our AI begins a deep scan of your skills and experience instantly.",
     },
     {
       id: 2,
-      title: "AI Analysis",
+      title: "Smart ATS Audit",
       icon: <LuSettings size={24} />,
       description:
-        "Our advanced algorithms minimize the effort to analyze and optimize your professional data.",
+        "Gemini & Llama analyze your content against modern hiring standards to identify critical gaps.",
     },
     {
       id: 3,
-      title: "Receive Insights",
+      title: "Get Actionable Insights",
       icon: <TbChartPie size={24} />,
       description:
-        "Get real-time protections and tailored insights to improve your resume for modern standards.",
+        "Receive a detailed ATS score and specific tips to optimize your resume for your target job.",
     },
   ];
 
@@ -67,7 +67,7 @@ const Works = () => {
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="z-10 relative pb-10 font-inter text-md text-muted-foreground leading-relaxed">
+              <CardContent className="z-10 relative pb-10 text-md text-muted-foreground leading-relaxed">
                 {step.description}
               </CardContent>
 

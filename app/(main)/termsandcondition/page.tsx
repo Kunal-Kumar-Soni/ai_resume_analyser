@@ -7,13 +7,13 @@ const TermsAndConditions = () => {
   const router = useRouter();
 
   return (
-    <div className="m-4 text-foreground">
-      <div className="shadow-sm mx-auto p-6 border border-border rounded-xl max-w-6xl">
+    <div className="m-4 mx-auto max-w-7xl text-foreground">
+      <div className="shadow-sm m-6 p-6 border border-border rounded-xl">
         {/* Navigation */}
         <div className="mb-6">
           <button
             onClick={() => router.back()}
-            className="group flex items-center gap-2 font-bold text-[10px] text-zinc-400 hover:text-black dark:hover:text-white uppercase tracking-[0.2em] transition-all"
+            className="group flex items-center gap-2 font-bold text-[10px] text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 uppercase tracking-[0.2em] transition-all"
           >
             <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
             Back
@@ -21,47 +21,62 @@ const TermsAndConditions = () => {
         </div>
 
         {/* Header */}
-        <header className="mb-10 pb-6 border-border border-b">
-          <h1 className="font-bold text-3xl tracking-tight">Terms & Conditions</h1>
-          <p className="opacity-60 mt-2 text-sm">Effective Date: December 20, 2025</p>
+        <header className="mb-10 pb-6 border-zinc-100 dark:border-zinc-900 border-b">
+          <h1 className="font-black text-zinc-900 dark:text-zinc-100 text-4xl tracking-tight">
+            Terms & Conditions
+          </h1>
         </header>
 
         {/* Content */}
-        <main className="space-y-8 leading-relaxed">
+        <main className="space-y-10 leading-relaxed">
           <section>
-            <h2 className="mb-3 font-semibold text-primary text-xl">1. Acceptance of Terms</h2>
-            <p className="opacity-90">
-              By using Resume.ai, you agree to follow our rules. If you do not agree, please do not
-              use our service.
+            <h2 className="mb-4 font-bold text-zinc-900 dark:text-zinc-100 text-xl uppercase tracking-tight">
+              1. AI Analysis & Accuracy
+            </h2>
+            <p className="opacity-80 text-base">
+              Our platform uses Multi-Model AI (Gemini/Llama) to analyze resumes. While our
+              suggestions are data-driven, we do not guarantee 100% accuracy or job placement. The
+              final decision to apply with the generated content rests solely with the user.
             </p>
           </section>
 
           <section>
-            <h2 className="mb-3 font-semibold text-primary text-xl">2. User Responsibility</h2>
-            <p className="opacity-90">
-              You are responsible for the information you enter. Please make sure your professional
-              data is accurate and you have the right to use it.
+            <h2 className="mb-4 font-bold text-zinc-900 dark:text-zinc-100 text-xl uppercase tracking-tight">
+              2. Data Processing & Privacy
+            </h2>
+            <p className="opacity-80 text-base">
+              By uploading your resume, you grant us permission to process the data for analysis. We
+              ensure that your professional information is never used to train public AI models and
+              is handled with enterprise-grade security.
             </p>
           </section>
 
-          <section className="bg-muted/50 p-4 border-primary border-l-4 rounded-r-md">
-            <p className="font-medium text-sm italic">
-              <strong>Note:</strong> Always review your AI-generated content before final use.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-3 font-semibold text-primary text-xl">3. AI Content Disclaimer</h2>
-            <p className="opacity-90">
-              Our AI generates suggestions to help you. However, we do not guarantee that the
-              content will be perfect or lead to a job. Always review your resume before sending it.
+          <section className="bg-zinc-50 dark:bg-zinc-900/50 p-6 border-zinc-900 dark:border-zinc-100 border-l-4 rounded-r-xl transition-all">
+            <p className="font-bold text-zinc-800 dark:text-zinc-200 text-base sm:text-lg italic">
+              Note: Our AI advisor provides "recommendations" based on common ATS patterns. Use them
+              as a guide to supplement your own professional judgment.
             </p>
           </section>
 
           <section>
-            <h2 className="mb-3 font-semibold text-primary text-xl">4. Service Changes</h2>
-            <p className="opacity-90">
-              We may update or change our features at any time to improve the user experience.
+            <h2 className="mb-4 font-bold text-zinc-900 dark:text-zinc-100 text-xl uppercase tracking-tight">
+              3. User Responsibility
+            </h2>
+            <p className="opacity-80 text-base">
+              Users must provide authentic and accurate professional information. Any misuse of the
+              service, including uploading malicious files or scraping AI-generated insights, will
+              result in immediate access termination.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 font-bold text-zinc-900 dark:text-zinc-100 text-xl uppercase tracking-tight">
+              4. Service Evolution
+            </h2>
+            <p className="opacity-80 text-base">
+              We continuously update our AI models to stay aligned with modern recruitment
+              standards. These updates happen automatically to ensure you always get the most
+              relevant career insights.
             </p>
           </section>
         </main>

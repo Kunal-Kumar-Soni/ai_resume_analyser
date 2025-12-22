@@ -15,6 +15,7 @@ import {
   ArrowLeft,
   Zap,
 } from "lucide-react";
+import { GrTechnology } from "react-icons/gr";
 import { getPDFText } from "@/lib/getPDFText";
 import PageLoader from "@/components/ui/custom-animated-loader";
 import { useAuth } from "@/hooks/useAuth";
@@ -23,7 +24,7 @@ import { generateAiResumeFromGemini } from "@/actions/gemini";
 import { Spinner } from "@/components/ui/spinner";
 import { useAnalysis } from "@/hooks/useAnalysis";
 import { toast } from "sonner";
-import { generateAiResumeFromOpenai } from "@/actions/groq";
+import { generateAiResumeFromGroq } from "@/actions/groq";
 import {
   Select,
   SelectContent,
@@ -38,8 +39,7 @@ const PDFUploadSleek = () => {
   const [extractedText, setExtractedText] = useState<string>("");
   const [jobDescription, setJobDescription] = useState<string>("");
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  // Default set to Groq
-  const [selectedModel, setSelectedModel] = useState("groq");
+  const [selectedModel, setSelectedModel] = useState<string>("groq");
 
   const { user, isLoading } = useAuth();
   const { setAnalysisData, isAnalysisDataLoading, setIsAnalysisDataLoading } = useAnalysis();
@@ -108,7 +108,7 @@ const PDFUploadSleek = () => {
       if (selectedModel === "gemini") {
         res = await generateAiResumeFromGemini(extractedText, jobDescription);
       } else {
-        res = await generateAiResumeFromOpenai(extractedText, jobDescription);
+        res = await generateAiResumeFromGroq(extractedText, jobDescription);
       }
 
       if (res.success) {
@@ -154,16 +154,16 @@ const PDFUploadSleek = () => {
         <nav className="flex justify-between items-center mb-12 pb-8 border-zinc-200 dark:border-zinc-800 border-b">
           <div className="flex items-center gap-4">
             <div className="group relative flex justify-center items-center bg-black dark:bg-white shadow-2xl rounded-xl w-10 h-10 overflow-hidden">
-              <Sparkles className="z-10 relative w-6 h-6 text-white dark:text-black" />
+              <GrTechnology className="z-10 relative w-6 h-6 text-white dark:text-black" />
               <div className="absolute inset-0 bg-linear-to-tr from-blue-500/20 via-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
             <div>
               <h2 className="flex items-center gap-2 font-bold text-sm uppercase tracking-tight">
-                Gemini
+                Aura
               </h2>
               <p className="flex items-center gap-1 font-black text-[9px] text-zinc-400 uppercase tracking-[0.3em]">
                 <span className="bg-green-500 rounded-full w-1 h-1 animate-pulse" />
-                Neural Engine
+                Synthetic Mind
               </p>
             </div>
           </div>

@@ -55,8 +55,8 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="m-4 text-foreground">
-      <div className="shadow-sm mx-auto p-6 border border-border rounded-xl max-w-6xl">
+    <div className="m-4 mx-auto max-w-7xl text-foreground">
+      <div className="shadow-sm m-6 p-6 border border-border rounded-xl">
         {/* Navigation */}
         <div className="mb-6">
           <button

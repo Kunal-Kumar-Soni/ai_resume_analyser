@@ -10,6 +10,8 @@ import {
   MessageSquareQuote,
   CheckCircle2,
   TrendingUp,
+  Zap,
+  Search,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
@@ -101,76 +103,104 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Right Side: Visual Feedback Card */}
-          <div className="relative lg:col-span-5">
+          {/*Right Side Box*/}
+          <div className="relative lg:col-span-5 mx-auto px-2 sm:px-0 w-full max-w-2xl">
             <div className="group relative">
-              {/* Outer Glow */}
-              <div className="absolute -inset-1 bg-linear-to-r from-primary/30 to-blue-600/30 opacity-50 group-hover:opacity-100 blur-xl rounded-[3rem] transition duration-1000" />
+              {/* Animated Outer Glow - Mobile optimized blur */}
+              <div className="absolute -inset-1 bg-linear-to-r from-indigo-500/30 to-emerald-500/30 opacity-40 group-hover:opacity-100 blur-lg sm:blur-xl rounded-[2rem] sm:rounded-[3rem] transition duration-1000" />
 
-              <Card className="relative bg-white/80 dark:bg-zinc-950/90 shadow-2xl backdrop-blur-2xl p-8 border-white/20 dark:border-zinc-800/50 rounded-[2.5rem] group-hover:rotate-1 transition-all duration-500">
-                <div className="space-y-6">
-                  {/* Card Header */}
-                  <div className="flex justify-between items-center pb-5 border-border/50 border-b">
+              <Card className="relative bg-white/90 dark:bg-zinc-950/90 shadow-2xl hover:shadow-primary/5 backdrop-blur-xl p-5 sm:p-8 border-white/20 dark:border-zinc-800/50 rounded-[2rem] sm:rounded-[2.5rem] transition-all duration-500">
+                <div className="space-y-5 sm:space-y-6">
+                  {/* --- Card Header --- */}
+                  <div className="flex justify-between items-center pb-4 border-zinc-200/50 dark:border-zinc-800/50 border-b">
                     <div className="flex items-center gap-3">
-                      <div className="flex justify-center items-center bg-primary/10 rounded-xl ring-1 ring-primary/20 w-10 h-10 text-primary">
+                      <div className="flex justify-center items-center bg-zinc-100 dark:bg-zinc-800/50 rounded-xl ring-1 ring-zinc-200 dark:ring-zinc-700 w-10 h-10 text-zinc-900 dark:text-zinc-100 transition-colors duration-300">
                         <BrainCircuit size={20} />
                       </div>
-                      <h4 className="font-black text-lg tracking-tight">AI Advisor</h4>
+                      <div>
+                        <h4 className="font-black text-base sm:text-lg tracking-tight">
+                          AI Resume Advisor
+                        </h4>
+                        <p className="font-bold text-[10px] text-zinc-500 uppercase tracking-widest">
+                          Multi-Model Analysis
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex bg-green-500 rounded-full w-2 h-2 animate-pulse" />
+                    <div className="flex items-center gap-2">
+                      <span className="hidden sm:block font-bold text-[10px] text-emerald-500 uppercase">
+                        Live Analysis
+                      </span>
+                      <div className="flex bg-emerald-500 rounded-full w-2 h-2 animate-pulse" />
+                    </div>
                   </div>
 
-                  {/* Suggestion 1: High Impact */}
-                  <div className="group/msg relative flex items-start gap-3 bg-primary/5 hover:bg-primary/10 p-4 border border-primary/10 rounded-2xl transition-colors">
-                    <Lightbulb className="mt-1 w-5 h-5 text-yellow-500 shrink-0" />
+                  {/* --- Insight 1: Actionable Advice --- */}
+                  <div className="group/msg relative flex items-start gap-3 bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900/50 dark:hover:bg-zinc-900 p-4 border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl transition-all">
+                    <Zap
+                      className="mt-1 w-5 h-5 text-zinc-900 dark:text-zinc-100 shrink-0"
+                      fill="currentColor"
+                    />
                     <div className="space-y-1">
-                      <p className="font-black text-[10px] text-primary uppercase tracking-widest">
-                        Critical Insight
+                      <p className="font-black text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
+                        Quick Win
                       </p>
-                      <p className="font-bold text-sm leading-snug">
-                        Your summary lacks{" "}
-                        <span className="text-primary underline">quantifiable data</span>.
-                        Mentioning '30% revenue growth' would make it 2x stronger.
+                      <p className="font-bold text-zinc-800 dark:text-zinc-200 text-sm leading-snug">
+                        Optimize{" "}
+                        <span className="text-zinc-900 dark:text-zinc-100 decoration-2 decoration-zinc-400 dark:decoration-zinc-500 underline underline-offset-4">
+                          Keyword Density
+                        </span>
+                        . Align your skills with the Job Description to pass automated screening
+                        bots.
                       </p>
                     </div>
                   </div>
 
-                  {/* Suggestion 2: Skill Gap */}
-                  <div className="flex items-start gap-3 bg-muted/30 opacity-80 p-4 border border-border/50 rounded-2xl scale-95 translate-x-4">
-                    <MessageSquareQuote className="mt-1 w-5 h-5 text-muted-foreground shrink-0" />
+                  {/* --- Insight 2: Keyword Gap --- */}
+                  <div className="flex items-start gap-3 bg-zinc-100/50 dark:bg-zinc-900/50 p-4 border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl">
+                    <Search className="mt-1 w-5 h-5 text-zinc-900 dark:text-zinc-100 shrink-0" />
                     <div className="space-y-1">
-                      <p className="font-bold text-[10px] text-muted-foreground uppercase">
-                        JD Alignment
+                      <p className="font-bold text-[10px] text-zinc-500 uppercase tracking-widest">
+                        Keyword Missing
                       </p>
-                      <p className="font-medium text-xs italic">
-                        "Consider adding 'Agile Methodology'. It's a key requirement for this role."
+                      <p className="font-medium text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm italic">
+                        "The JD mentions 'Cloud Architecture'. Ensure this is listed in your Core
+                        Skills."
                       </p>
                     </div>
                   </div>
 
-                  {/* Footer Stats inside Card */}
+                  {/* --- Metrics Grid --- */}
                   <div className="gap-3 grid grid-cols-2 pt-2">
-                    <div className="bg-background/50 p-3 border border-border/50 rounded-xl text-center">
-                      <p className="font-bold text-[9px] text-muted-foreground uppercase">
-                        Match Score
+                    <div className="bg-white dark:bg-zinc-900 shadow-sm p-3 border border-zinc-200 dark:border-zinc-800 rounded-xl text-center hover:scale-105 transition-transform">
+                      <p className="font-bold text-[9px] text-zinc-500 uppercase tracking-tighter">
+                        ATS Compatibility
                       </p>
-                      <p className="font-black text-primary text-xl">84%</p>
+                      <div className="flex justify-center items-center gap-1">
+                        <TrendingUp size={12} className="text-emerald-500" />
+                        <p className="font-black text-zinc-900 dark:text-white text-lg sm:text-xl">
+                          84%
+                        </p>
+                      </div>
                     </div>
-                    <div className="bg-background/50 p-3 border border-border/50 rounded-xl text-center">
-                      <p className="font-bold text-[9px] text-muted-foreground uppercase">
-                        Readability
+                    <div className="bg-white dark:bg-zinc-900 shadow-sm p-3 border border-zinc-200 dark:border-zinc-800 rounded-xl text-center hover:scale-105 transition-transform">
+                      <p className="font-bold text-[9px] text-zinc-500 uppercase tracking-tighter">
+                        Formatting
                       </p>
-                      <p className="font-black text-green-500 text-xl">High</p>
+                      <p className="font-black text-lg sm:text-xl uppercase">Clean</p>
                     </div>
                   </div>
                 </div>
               </Card>
 
-              {/* Hired Notification Overlay */}
-              <div className="-top-6 -right-6 absolute bg-yellow-400 shadow-xl p-3 border-2 border-white dark:border-zinc-900 rounded-2xl rotate-12 group-hover:scale-110 transition-transform">
-                <span className="flex items-center gap-1 font-black text-black text-xs">
-                  Ready to Apply!{" "}
-                  <CheckCircle2 size={14} fill="black" className="text-yellow-400" />
+              {/* --- Floating Notification --- */}
+              <div className="-top-4 sm:-top-6 -right-2 sm:-right-6 absolute bg-emerald-400 dark:bg-emerald-500 shadow-xl p-2 sm:p-3 border-2 border-white dark:border-zinc-900 rounded-xl sm:rounded-2xl rotate-6 sm:rotate-12 group-hover:rotate-0 group-hover:scale-110 transition-all cursor-default select-none">
+                <span className="flex items-center gap-1.5 font-black text-[10px] text-black sm:text-xs">
+                  ATS Optimized!{" "}
+                  <CheckCircle2
+                    size={14}
+                    fill="black"
+                    className="text-emerald-400 dark:text-emerald-500"
+                  />
                 </span>
               </div>
             </div>

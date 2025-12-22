@@ -3,17 +3,20 @@
 import { useAnalysis } from "@/hooks/useAnalysis";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
-import { AlertCircle, ArrowLeft, CheckCircle2, Download, Sparkles, Zap } from "lucide-react";
-import { useEffect, useMemo } from "react";
+import { AlertCircle, ArrowLeft, History, Sparkles, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import PageLoader from "@/components/ui/custom-animated-loader";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { NumberTicker } from "@/components/ui/number-ticker";
+import { createPortal } from "react-dom";
+import { Button } from "@/components/ui/button";
 
 const AnalysisResult = () => {
   const { analysisData } = useAnalysis();
   const { user, isLoading } = useAuth();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     if (!analysisData || !user) {
@@ -21,11 +24,26 @@ const AnalysisResult = () => {
     }
   }, [analysisData, router, user]);
 
-  if (!analysisData || isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-[44vh]">
+  //Handling loader
+  useEffect(() => {
+    setMounted(true);
+    if (isLoading || !analysisData) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isLoading, analysisData]);
+
+  if (!mounted || isLoading || !analysisData) {
+    return createPortal(
+      <div className="z-9999 fixed inset-0 flex justify-center items-center bg-background/98 backdrop-blur-md w-screen h-screen">
         <PageLoader />
-      </div>
+      </div>,
+      document.body
     );
   }
 
@@ -36,7 +54,7 @@ const AnalysisResult = () => {
   const points = pPart ? pPart.trim() : analysisData;
 
   return (
-    <div className="mx-auto p-6 max-w-7xl min-h-[80vh] text-zinc-900 dark:text-zinc-100 animate-in duration-700 fade-in">
+    <div className="mx-auto p-6 max-w-7xl overflow-x-auto text-zinc-900 dark:text-zinc-100 animate-in duration-700 fade-in">
       <div className="space-y-8">
         {/* --- HEADER --- */}
         <header className="flex md:flex-row flex-col justify-between md:items-center gap-6">
@@ -52,35 +70,25 @@ const AnalysisResult = () => {
               Analysis <span className="text-zinc-400 dark:text-zinc-700">Report.</span>
             </h1>
           </div>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              className="hover:bg-zinc-50 dark:hover:bg-zinc-900 px-6 py-5 border-zinc-200 dark:border-zinc-800 rounded-full font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all"
+            >
+              <History className="mr-2 w-3.5 h-3.5" />
+              History
+            </Button>
+          </div>
         </header>
 
-        <div className="gap-8 grid grid-cols-1 lg:grid-cols-3">
-          {/* --- METADATA SIDEBAR --- */}
-          <div className="space-y-6 lg:col-span-1">
-            <Card className="bg-transparent p-6 border-zinc-200 dark:border-zinc-800 rounded-[2rem]">
-              <h3 className="mb-4 font-black text-zinc-400 text-xs uppercase tracking-widest">
-                Metadata
-              </h3>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center py-2 border-zinc-100 dark:border-zinc-900 border-b text-[11px]">
-                  <span className="font-medium text-zinc-500">Status</span>
-                  <span className="font-bold text-green-500 uppercase">Success</span>
-                </div>
-                <div className="flex justify-between items-center py-2 text-[11px]">
-                  <span className="font-medium text-zinc-500">Engine</span>
-                  <span className="font-bold italic">Gemini-Flash-1.5</span>
-                </div>
-              </div>
-            </Card>
-          </div>
-
+        <div className="gap-8 grid grid-cols-1">
           {/* --- RESULT SECTION --- */}
           <div className="flex flex-col gap-8 lg:col-span-2">
             {/* SCORE CARD - CLEAN MAGIC UI */}
             <Card className="group relative flex flex-col justify-center items-center bg-transparent p-8 border-zinc-200 dark:border-zinc-800 rounded-[2rem] min-h-55 overflow-hidden transition-all duration-300">
               <div className="z-10 flex flex-col items-center">
-                <span className="mb-2 font-black text-[9px] text-zinc-400 dark:text-zinc-600 uppercase tracking-[0.4em]">
-                  System Match
+                <span className="mb-2 font-plusJakartaSans font-black text-zinc-400 dark:text-zinc-600 uppercase tracking-[0.4em]">
+                  ATS Score
                 </span>
 
                 {score ? (
@@ -140,19 +148,17 @@ const AnalysisResult = () => {
               <div className="relative ml-2 pl-8">
                 <div className="top-0 bottom-0 left-0 absolute bg-linear-to-b from-transparent via-zinc-200 dark:via-zinc-800 to-transparent w-0.5" />
                 <TypingAnimation
-                  // leading-8 aur tracking-tight se text ekdum saaf aur professional dikhega
-                  className="font-medium text-zinc-600 dark:text-zinc-300 text-sm md:text-base text-left leading-8 tracking-tight whitespace-pre-line"
+                  className="font-medium text-[14px] text-zinc-600 dark:text-zinc-300 sm:text-base md:text-base text-left leading-8 tracking-tight whitespace-pre-line"
                   duration={10}
                 >
-                  {/* AI ke baje huye faltu gaps ko filter karke clean format mein join karna */}
-                  {
-                    points
-                      ?.split("\n")
-                      ?.map((line) => line.trim())
-                      ?.filter((line) => line)
-                      ?.join("\n\n")
-                      ?.replace(/\*\*/g, "") // Ye stars ko udane ka sabse clean jugad hai bina markdown ke
-                  }
+                  {points
+                    ?.replace(/\*\*/g, "")
+                    ?.split("\n")
+                    ?.filter(Boolean)
+                    ?.map((l) =>
+                      l.includes(":") ? l.replace(/(^.*?):/, (m) => `${m.toUpperCase()}⮕ `) : l
+                    )
+                    ?.join("\n\n")}
                 </TypingAnimation>
               </div>
 

@@ -19,10 +19,10 @@ const Security = () => {
     },
     {
       id: 3,
-      title: "End-to-End Encryption",
+      title: "Data Privacy & Security",
       icon: <LuFingerprint size={24} />,
       description:
-        "Your documents are processed using AES-256 encryption. Once analyzed, your professional data is visible only to you and is never shared with third-party vendors.",
+        "Your resumes are never used for AI training. We ensure 100% data privacy with encrypted processing, meaning your professional details stay yours alone.",
     },
   ];
 
@@ -59,7 +59,7 @@ const Security = () => {
                   {step.title}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="z-10 relative font-inter text-muted-foreground leading-relaxed">
+              <CardContent className="z-10 relative font- text-muted-foreground leading-relaxed">
                 {step.description}
               </CardContent>
 
