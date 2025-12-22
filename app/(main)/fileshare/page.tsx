@@ -13,16 +13,24 @@ import {
   X,
   History,
   ArrowLeft,
+  Zap,
 } from "lucide-react";
 import { getPDFText } from "@/lib/getPDFText";
 import PageLoader from "@/components/ui/custom-animated-loader";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
-import { generateAiResume } from "@/actions/resume";
+import { generateAiResumeFromGemini } from "@/actions/gemini";
 import { Spinner } from "@/components/ui/spinner";
 import { useAnalysis } from "@/hooks/useAnalysis";
 import { toast } from "sonner";
-import { generateAiResumeFromOpenai } from "@/actions/openAi";
+import { generateAiResumeFromOpenai } from "@/actions/groq";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const PDFUploadSleek = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -30,6 +38,8 @@ const PDFUploadSleek = () => {
   const [extractedText, setExtractedText] = useState<string>("");
   const [jobDescription, setJobDescription] = useState<string>("");
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  // Default set to Groq
+  const [selectedModel, setSelectedModel] = useState("groq");
 
   const { user, isLoading } = useAuth();
   const { setAnalysisData, isAnalysisDataLoading, setIsAnalysisDataLoading } = useAnalysis();
@@ -39,21 +49,15 @@ const PDFUploadSleek = () => {
     setIsAnalysisDataLoading(false);
   }, [setIsAnalysisDataLoading]);
 
-  // --- Common Logic for File Processing ---
   const processFile = async (selectedFile: File) => {
     if (!selectedFile || selectedFile.type !== "application/pdf") return;
-
     setFile(selectedFile);
     setIsParsing(true);
-
     try {
       const text = await getPDFText(selectedFile);
       if (text.trim() === "") {
         const toastId = toast.error("No text found in PDF.", {
-          action: {
-            label: "Cancel",
-            onClick: () => toast.dismiss(toastId),
-          },
+          action: { label: "Cancel", onClick: () => toast.dismiss(toastId) },
         });
         setFile(null);
         return;
@@ -66,13 +70,11 @@ const PDFUploadSleek = () => {
     }
   };
 
-  // --- Event Handlers ---
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) processFile(selectedFile);
   };
 
-  // --- Drag and Drop Handlers ---
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
@@ -95,32 +97,32 @@ const PDFUploadSleek = () => {
     setExtractedText("");
   };
 
-  // Execute Analysis
+  // Execute Analysis with Model Switching
   const handleExecuteAnalysis = async () => {
     if (!extractedText) return;
     setIsAnalysisDataLoading(true);
 
     try {
-      const res = await generateAiResumeFromOpenai(extractedText, jobDescription);
-      // const res = await generateAiResume(extractedText, jobDescription);
+      // Model selection logic
+      let res;
+      if (selectedModel === "gemini") {
+        res = await generateAiResumeFromGemini(extractedText, jobDescription);
+      } else {
+        res = await generateAiResumeFromOpenai(extractedText, jobDescription);
+      }
+
       if (res.success) {
         setAnalysisData(res.output);
         router.replace("fileshare/analysis-result");
       } else {
         const toastId = toast.error(res?.error, {
-          action: {
-            label: "Cancel",
-            onClick: () => toast.dismiss(toastId),
-          },
+          action: { label: "Cancel", onClick: () => toast.dismiss(toastId) },
         });
         setIsAnalysisDataLoading(false);
       }
     } catch (error) {
       const toastId = toast.error("Execution failed. Please try again.", {
-        action: {
-          label: "Cancel",
-          onClick: () => toast.dismiss(toastId),
-        },
+        action: { label: "Cancel", onClick: () => toast.dismiss(toastId) },
       });
       setIsAnalysisDataLoading(false);
     }
@@ -133,14 +135,12 @@ const PDFUploadSleek = () => {
   }, [user, isLoading, router]);
 
   if (isLoading || !user || isAnalysisDataLoading) {
-    console.log("showing loader");
     return <PageLoader />;
   }
 
   return (
     <div className="selection:bg-zinc-200 dark:selection:bg-zinc-800 mx-auto max-w-7xl min-h-screen text-zinc-900 dark:text-zinc-100 transition-colors duration-500">
       <div className="z-10 relative space-y-12 mx-auto p-6 max-w-350">
-        {/* --- 1. TOP MOST BACK ACTION --- */}
         <div className="mb-6">
           <button
             onClick={() => router.replace("/")}
@@ -151,14 +151,12 @@ const PDFUploadSleek = () => {
           </button>
         </div>
 
-        {/* --- 2. MAIN NAVIGATION (Gemini Logo) --- */}
         <nav className="flex justify-between items-center mb-12 pb-8 border-zinc-200 dark:border-zinc-800 border-b">
           <div className="flex items-center gap-4">
             <div className="group relative flex justify-center items-center bg-black dark:bg-white shadow-2xl rounded-xl w-10 h-10 overflow-hidden">
               <Sparkles className="z-10 relative w-6 h-6 text-white dark:text-black" />
               <div className="absolute inset-0 bg-linear-to-tr from-blue-500/20 via-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
-
             <div>
               <h2 className="flex items-center gap-2 font-bold text-sm uppercase tracking-tight">
                 Gemini
@@ -169,7 +167,6 @@ const PDFUploadSleek = () => {
               </p>
             </div>
           </div>
-
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
@@ -181,9 +178,7 @@ const PDFUploadSleek = () => {
           </div>
         </nav>
 
-        {/* --- MAIN CONTENT AREA --- */}
         <div className="items-start gap-12 grid grid-cols-1 lg:grid-cols-12">
-          {/* --- LEFT: THE UPLOAD CORE (8 COLS) --- */}
           <div className="space-y-8 lg:col-span-7">
             <header className="space-y-2">
               <h1 className="font-black text-5xl lg:text-6xl tracking-tighter">
@@ -197,7 +192,6 @@ const PDFUploadSleek = () => {
 
             {!file ? (
               <div className="group relative mt-8">
-                {/* Clean Border Card */}
                 <div
                   className={`absolute inset-0 bg-zinc-100 dark:bg-zinc-900 rounded-[2.5rem] transition-transform duration-500 ${
                     isDragging ? "scale-100" : "scale-[0.98] group-hover:scale-100"
@@ -262,7 +256,6 @@ const PDFUploadSleek = () => {
                 </Card>
               </div>
             ) : (
-              /* --- FILE LOADED STATE --- */
               <div className="slide-in-from-bottom-4 animate-in duration-500 fade-in">
                 <Card className="flex justify-between items-center bg-white dark:bg-[#0a0a0a] shadow-2xl p-8 border-2 border-black dark:border-white rounded-[2.5rem]">
                   <div className="flex items-center gap-6">
@@ -296,14 +289,57 @@ const PDFUploadSleek = () => {
             )}
           </div>
 
-          {/* --- RIGHT: THE CONTROL PANEL (4 COLS) --- */}
           <div className="space-y-6 lg:col-span-5">
-            <Card className="space-y-8 bg-white dark:bg-[#0a0a0a] shadow-xl p-8 border border-zinc-200 dark:border-zinc-800 rounded-[2.5rem]">
+            <Card className="space-y-3 bg-white dark:bg-[#0a0a0a] shadow-xl p-8 border border-zinc-200 dark:border-zinc-800 rounded-[2.5rem]">
               <div className="flex justify-between items-center">
                 <h4 className="font-black text-md uppercase tracking-widest">Configuration</h4>
                 <Sparkles className="w-4 h-4 text-zinc-400" />
               </div>
 
+              {/* ENGINE SELECTOR - MINIMALIST PREMIUM */}
+              <div className="space-y-2">
+                <label className="font-black text-[12px] text-zinc-400 uppercase tracking-widest">
+                  AI Engine
+                </label>
+
+                <Select value={selectedModel} onValueChange={setSelectedModel}>
+                  <SelectTrigger className="bg-zinc-50 dark:bg-zinc-900/50 mt-2 px-6 py-8 border-none rounded-2xl focus:ring-0 w-full h-14">
+                    <div className="flex items-center gap-3 text-left">
+                      <SelectValue />
+                    </div>
+                  </SelectTrigger>
+
+                  <SelectContent className="bg-white dark:bg-zinc-950 shadow-2xl border-zinc-200 dark:border-zinc-800 rounded-2xl">
+                    <SelectItem value="gemini" className="py-4 rounded-xl cursor-pointer">
+                      <div className="flex items-center gap-3">
+                        <div className="flex justify-center items-center w-6 h-6">
+                          <Sparkles size={14} />
+                        </div>
+
+                        <div className="flex flex-col">
+                          <span className="mb-1 font-bold uppercase leading-tight">Gemini</span>
+                          <span className="opacity-50 text-xs leading-tight">Deep Analysis</span>
+                        </div>
+                      </div>
+                    </SelectItem>
+
+                    <SelectItem value="groq" className="py-4 rounded-xl cursor-pointer">
+                      <div className="flex items-center gap-3">
+                        <div className="flex justify-center items-center w-6 h-6">
+                          <Zap size={14} />
+                        </div>
+
+                        <div className="flex flex-col">
+                          <span className="mb-1 font-bold uppercase leading-tight">Groq LPU</span>
+                          <span className="opacity-50 text-xs leading-tight">Instant Speed</span>
+                        </div>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* job content section */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center px-1">
                   <label className="font-black text-[12px] text-zinc-400 uppercase tracking-widest">
@@ -313,7 +349,7 @@ const PDFUploadSleek = () => {
                 <textarea
                   placeholder="Paste Job Description here..."
                   value={jobDescription}
-                  className="bg-zinc-50 dark:bg-[#050505] p-6 border border-zinc-200 dark:border-zinc-800 rounded-[2rem] outline-none focus:ring-1 focus:ring-black dark:focus:ring-white w-full h-72 font-medium dark:placeholder:text-zinc-800 placeholder:text-zinc-300 text-sm transition-all resize-none"
+                  className="bg-zinc-50 dark:bg-[#050505] p-6 border border-zinc-200 dark:border-zinc-800 rounded-[2rem] outline-none focus:ring-1 focus:ring-black dark:focus:ring-white w-full h-72 font-medium text-sm transition-all resize-none"
                   onChange={(e) => setJobDescription(e.target.value)}
                 />
               </div>
