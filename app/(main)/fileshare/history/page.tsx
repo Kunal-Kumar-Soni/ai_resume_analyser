@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import PageLoader from "@/components/ui/custom-animated-loader";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { TypingAnimation } from "@/components/ui/typing-animation";
+import { useAuth } from "@/hooks/useAuth";
 import { supabaseClient } from "@/lib/supabaseClient";
 import { AlertCircle, Zap, Sparkles, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,12 +22,19 @@ type GetAllDataType = {
 const Page = () => {
   const [getAllData, setGetAllData] = useState<GetAllDataType | null>(null);
   const [getSingleData, setGetSingleData] = useState<GetAllDataType[number] | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const resultSectionRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const { user, isLoading } = useAuth();
+
+  useEffect(() => {
+    if (!user || isLoading) {
+      router.push("/");
+    }
+  }, [user, router, isLoading]);
 
   const limitedDataOnly = async () => {
-    setIsLoading(true);
+    setLoading(true);
     const { data: allData } = await supabaseClient
       .from("resumeai")
       .select("*")
@@ -45,7 +53,7 @@ const Page = () => {
       }
     }
 
-    setIsLoading(false);
+    setLoading(false);
   };
 
   const handleSingleData = (id: number) => {
@@ -68,7 +76,7 @@ const Page = () => {
   const pointsSplit = text.split(/IMPROVEMENT POINTS:/i);
   let points = pointsSplit.length > 1 ? pointsSplit[1].trim() : text;
 
-  if (isLoading) return <PageLoader />;
+  if (loading || isLoading) return <PageLoader />;
 
   return (
     <div className="mx-auto p-6 max-w-7xl overflow-x-auto text-zinc-900 dark:text-zinc-100 animate-in duration-900 fade-in">
@@ -84,7 +92,7 @@ const Page = () => {
               Back
             </button>
             <h1 className="font-black text-4xl lg:text-6xl uppercase tracking-tighter">
-              Precision <span className="text-zinc-400 dark:text-zinc-700">Metrics.</span>
+              HISTORY <span className="text-zinc-400 dark:text-zinc-700">SECTION</span>
             </h1>
           </div>
         </header>
@@ -93,8 +101,7 @@ const Page = () => {
           {/* ---- LEFT SECTION ---- */}
           <aside className="flex flex-col col-span-1 lg:col-span-4 bg-background border rounded-[2rem]">
             <div className="p-6 border-b shrink-0">
-              <h2 className="font-black text-2xl italic uppercase tracking-tighter">History</h2>
-              <p className="mt-1 font-medium text-[10px] text-muted-foreground uppercase tracking-widest">
+              <p className="mt-1 font-medium text-muted-foreground uppercase tracking-widest">
                 Latest 10 Entries
               </p>
             </div>
