@@ -3,21 +3,26 @@ import { supabaseClient } from "@/lib/supabaseClient";
 import { useEffect, useState } from "react";
 
 const page = () => {
-  const [totalData, setTotalData] = useState<any>();
+  const limitedDataOnly = async () => {
+    const { data: allData } = await supabaseClient.from("resumeai").select("*");
 
-  const getDataFromSupabase = async () => {
-    const { error, data } = await supabaseClient.from("resumeai").select("*");
-    if (data) {
-      setTotalData(data);
-      console.log(data);
+    if (allData && allData.length > 10) {
+      const oldestId = allData[0].id;
+
+      const { error: errorData, data: deletedData } = await supabaseClient
+        .from("resumeai")
+        .delete()
+        .eq("id", oldestId);
+
+      console.log(deletedData);
     }
   };
 
   useEffect(() => {
-    getDataFromSupabase();
+    limitedDataOnly();
   }, []);
 
-  return <div>HistoryPage</div>;
+  return <div>History Page</div>;
 };
 
 export default page;
