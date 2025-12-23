@@ -32,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { supabaseClient } from "@/lib/supabaseClient";
 
 const PDFUploadSleek = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -97,6 +98,12 @@ const PDFUploadSleek = () => {
     setExtractedText("");
   };
 
+  // 1. Pehle extension hatao (taki clean name mile)
+  let cleanName = file?.name.replace(/\.[^/.]+$/, "") || "Untitled";
+
+  // 2. Phir check karo agar .pdf nahi hai toh laga do
+  let finalTitle = cleanName.endsWith(".pdf") ? cleanName : `${cleanName}.pdf`;
+
   // Execute Analysis with Model Switching
   const handleExecuteAnalysis = async () => {
     if (!extractedText) return;
@@ -114,6 +121,23 @@ const PDFUploadSleek = () => {
       if (res.success) {
         setAnalysisData(res.output);
         router.replace("fileshare/analysis-result");
+
+        const { data, error } = await supabaseClient
+          .from("resumeai")
+          .insert({
+            job_description: jobDescription,
+            model_selection: selectedModel,
+            title: finalTitle,
+            result: res.output,
+          })
+          .select()
+          .single();
+
+        if (error) {
+          console.log("Error:", error.message);
+        } else {
+          console.log("Success! Inserted Data:", data); // Ab yahan data dikhega
+        }
       } else {
         const toastId = toast.error(res?.error, {
           action: { label: "Cancel", onClick: () => toast.dismiss(toastId) },
@@ -169,6 +193,7 @@ const PDFUploadSleek = () => {
           </div>
           <div className="flex items-center gap-3">
             <Button
+              onClick={() => router.push("/fileshare/history")}
               variant="outline"
               className="hover:bg-zinc-50 dark:hover:bg-zinc-900 px-6 py-5 border-zinc-200 dark:border-zinc-800 rounded-full font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all"
             >
@@ -272,7 +297,7 @@ const PDFUploadSleek = () => {
                             <Spinner className="mt-2 w-8 h-8" />
                           </div>
                         ) : (
-                          file.name.replace(/\.[^/.]+$/, "")
+                          <>{finalTitle}</>
                         )}
                       </h4>
                     </div>

@@ -11,6 +11,7 @@ import { TypingAnimation } from "@/components/ui/typing-animation";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
+import { supabaseClient } from "@/lib/supabaseClient";
 
 const AnalysisResult = () => {
   const { analysisData } = useAnalysis();
@@ -72,6 +73,7 @@ const AnalysisResult = () => {
           </div>
           <div className="flex items-center gap-3">
             <Button
+              onClick={() => router.push("/fileshare/history")}
               variant="outline"
               className="hover:bg-zinc-50 dark:hover:bg-zinc-900 px-6 py-5 border-zinc-200 dark:border-zinc-800 rounded-full font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all"
             >
