@@ -4,20 +4,17 @@ import { useAnalysis } from "@/hooks/useAnalysis";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { AlertCircle, ArrowLeft, History, Sparkles, Zap } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import PageLoader from "@/components/ui/custom-animated-loader";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { NumberTicker } from "@/components/ui/number-ticker";
-import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
-import { supabaseClient } from "@/lib/supabaseClient";
 
 const AnalysisResult = () => {
   const { analysisData } = useAnalysis();
   const { user, isLoading } = useAuth();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     if (!analysisData || !user) {
@@ -25,37 +22,16 @@ const AnalysisResult = () => {
     }
   }, [analysisData, router, user]);
 
-  //Handling loader
-  useEffect(() => {
-    setMounted(true);
-    if (isLoading || !analysisData) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isLoading, analysisData]);
-
-  if (!mounted || isLoading || !analysisData) {
-    return createPortal(
-      <div className="z-9999 fixed inset-0 flex justify-center items-center bg-background/98 backdrop-blur-md w-screen h-screen">
-        <PageLoader />
-      </div>,
-      document.body
-    );
-  }
-
   // Required Optimizations
   const sMatch = analysisData?.match(/ATS SCORE:\s*(\d+)/i);
   const pPart = analysisData?.split(/IMPROVEMENT POINTS:/i)[1];
   const score = sMatch ? sMatch[1] : null;
   const points = pPart ? pPart.trim() : analysisData;
 
+  if (!user || isLoading) return <PageLoader />;
+
   return (
-    <div className="mx-auto p-6 max-w-7xl overflow-x-auto text-zinc-900 dark:text-zinc-100 animate-in duration-700 fade-in">
+    <div className="mx-auto p-6 max-w-7xl overflow-x-auto text-zinc-900 dark:text-zinc-100 animate-in duration-900 fade-in">
       <div className="space-y-8">
         {/* --- HEADER --- */}
         <header className="flex md:flex-row flex-col justify-between md:items-center gap-6">

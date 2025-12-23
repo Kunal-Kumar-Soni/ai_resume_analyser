@@ -46,7 +46,7 @@ const LogoLoader = ({ text = "Loading...", className }: LogoLoaderProps) => {
 // Full Page Wrapper
 export const PageLoader = () => {
   return (
-    <div className="z-50 fixed inset-0 flex justify-center items-center bg-background/95 backdrop-blur-sm">
+    <div className="z-50 fixed inset-0 flex justify-center items-center bg-background/95 backdrop-blur-sm min-h-screen">
       <LogoLoader />
     </div>
   );
