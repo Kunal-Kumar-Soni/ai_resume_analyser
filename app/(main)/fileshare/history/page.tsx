@@ -5,12 +5,12 @@ import { NumberTicker } from "@/components/ui/number-ticker";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { useAuth } from "@/hooks/useAuth";
 import { supabaseClient } from "@/lib/supabaseClient";
-import { AlertCircle, Zap, Sparkles, ArrowLeft } from "lucide-react";
+import { AlertCircle, Zap, Sparkles, ArrowLeft, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
-type GetAllDataType = {
+type getDataType = {
   created_at: string;
   id: number;
   title: string;
@@ -20,8 +20,8 @@ type GetAllDataType = {
 }[];
 
 const Page = () => {
-  const [getAllData, setGetAllData] = useState<GetAllDataType | null>(null);
-  const [getSingleData, setGetSingleData] = useState<GetAllDataType[number] | null>(null);
+  const [getAllData, setGetAllData] = useState<getDataType | null>(null);
+  const [getSingleData, setGetSingleData] = useState<getDataType[number] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const resultSectionRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -99,14 +99,14 @@ const Page = () => {
 
         <div className="items-start gap-8 grid grid-cols-1 lg:grid-cols-12">
           {/* ---- LEFT SECTION ---- */}
-          <aside className="flex flex-col col-span-1 lg:col-span-4 bg-background border rounded-[2rem]">
-            <div className="p-6 border-b shrink-0">
-              <p className="mt-1 font-medium text-muted-foreground uppercase tracking-widest">
+          <Card className="flex flex-col col-span-1 lg:col-span-4 bg-background border border-zinc-200 dark:border-zinc-800 rounded-[2rem]">
+            <div className="px-6 border-b shrink-0">
+              <p className="mb-4 font-medium text-muted-foreground uppercase tracking-widest">
                 Latest 10 Entries
               </p>
             </div>
 
-            <div className="flex-1 space-y-3 p-4 overflow-y-auto scrollbar-hide">
+            <div className="flex-1 space-y-3 px-4 overflow-y-auto scrollbar-hide">
               {getAllData?.map((data, index) => (
                 <div
                   key={data.id}
@@ -126,10 +126,7 @@ const Page = () => {
                     <div className="flex-1 min-w-0">
                       <h1 className="font-bold text-sm truncate tracking-tight">{data.title}</h1>
                       <p className="font-semibold text-[10px] text-muted-foreground uppercase">
-                        {new Date(data.created_at).toLocaleDateString(undefined, {
-                          day: "2-digit",
-                          month: "short",
-                        })}
+                        {data?.job_description}
                       </p>
                     </div>
                     <FaArrowRight
@@ -143,12 +140,13 @@ const Page = () => {
                 </div>
               ))}
             </div>
-          </aside>
+          </Card>
           {/* --- RESULT SECTION --- */}
           <div ref={resultSectionRef} className="flex flex-col gap-8 col-span-1 lg:col-span-8">
             {/* SCORE CARD - CLEAN MAGIC UI */}
             <Card className="group relative flex flex-col justify-center items-center bg-transparent p-8 border-zinc-200 dark:border-zinc-800 rounded-[2rem] min-h-55 overflow-hidden transition-all duration-300">
               <div className="z-10 flex flex-col items-center">
+                {/* Existing Header */}
                 <span className="mb-2 font-plusJakartaSans font-black text-zinc-400 dark:text-zinc-600 uppercase tracking-[0.4em]">
                   ATS Score
                 </span>
@@ -156,7 +154,6 @@ const Page = () => {
                 {score ? (
                   <>
                     <div className="flex items-baseline font-black text-zinc-900 dark:text-zinc-100 text-7xl lg:text-8xl leading-none tracking-tighter">
-                      {/* Magic UI Number Ticker */}
                       <NumberTicker
                         value={parseInt(score)}
                         className="text-zinc-900 dark:text-zinc-100"
@@ -182,6 +179,34 @@ const Page = () => {
                       <p className="font-bold text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
                         {parseInt(score) > 70 ? "Optimal Match" : "Below Threshold"}
                       </p>
+                    </div>
+
+                    {/* --- Naya Section: Model Info & Delete Button --- */}
+                    <div className="flex flex-col items-center gap-4 mt-8">
+                      {/* Model Identifier */}
+                      <div className="flex items-center gap-2 bg-zinc-100/50 dark:bg-zinc-900/50 shadow-sm backdrop-blur-sm px-3 py-1.5 border border-zinc-200/50 dark:border-zinc-800/50 rounded-full transition-all duration-300">
+                        <span className="font-bold text-[10px] text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                          Powered by
+                        </span>
+
+                        <span className="flex items-center gap-1.5 font-plusJakartaSans font-extrabold text-xs">
+                          {getSingleData?.model_selection === "groq" ? (
+                            <div className="flex items-center gap-1.5 text-orange-500 dark:text-orange-400">
+                              <Zap className="fill-current w-3.5 h-3.5 animate-pulse" />
+                              <span className="bg-clip-text bg-linear-to-r from-orange-500 to-amber-500 text-transparent">
+                                GROQ LPU
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1.5 text-blue-500 dark:text-blue-400">
+                              <Sparkles className="fill-current w-3.5 h-3.5 animate-pulse" />
+                              <span className="bg-clip-text bg-linear-to-r from-blue-500 to-indigo-500 text-transparent">
+                                GEMINI
+                              </span>
+                            </div>
+                          )}
+                        </span>
+                      </div>
                     </div>
                   </>
                 ) : (
