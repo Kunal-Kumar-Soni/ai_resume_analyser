@@ -217,92 +217,126 @@ const Page = () => {
 
           {/* RESULT SECTION (Design Untouched) */}
           <div ref={resultSectionRef} className="flex flex-col gap-8 col-span-1 lg:col-span-8">
-            <Card className="group relative flex flex-col justify-center items-center bg-transparent p-8 border-zinc-200 dark:border-zinc-800 rounded-[2rem] min-h-55 overflow-hidden transition-all duration-300">
-              <div className="z-10 flex flex-col items-center">
-                <span className="mb-2 font-plusJakartaSans font-black text-zinc-400 dark:text-zinc-600 uppercase tracking-[0.4em]">
-                  ATS Score
+            {/* ATS Score Section */}
+            {getSingleData && (
+              <div className="flex flex-col items-center gap-2 bg-zinc-100/50 dark:bg-zinc-900/80 px-6 py-2 border-red-500 border-l-4 rounded-r-xl text-center">
+                <span className="font-bold text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.3em]">
+                  Resume Title
                 </span>
-                {parsedData.score ? (
-                  <>
-                    <div className="flex items-baseline font-black text-zinc-900 dark:text-zinc-100 text-7xl lg:text-8xl leading-none tracking-tighter">
-                      <NumberTicker
-                        value={parseInt(parsedData.score)}
-                        className="text-zinc-900 dark:text-zinc-100"
-                      />
-                      <span className="ml-2 font-medium text-zinc-500 text-3xl md:text-4xl select-none">
-                        %
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-zinc-100/50 dark:bg-zinc-900/50 shadow-sm mt-8 px-3 py-1.5 border rounded-full transition-all duration-300">
-                      <span className="font-bold text-[10px] text-zinc-400 uppercase tracking-wider">
-                        Powered by
-                      </span>
-                      <span className="flex items-center gap-1.5 font-extrabold text-xs">
-                        {getSingleData?.model_selection === "groq" ? (
-                          <div className="flex items-center gap-1.5 text-orange-500">
-                            <Zap className="w-3.5 h-3.5 animate-pulse" /> GROQ LPU
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-1.5 text-blue-500">
-                            <Sparkles className="w-3.5 h-3.5 animate-pulse" /> GEMINI
-                          </div>
-                        )}
-                      </span>
-                    </div>
-                  </>
-                ) : (
-                  <div className="flex flex-col items-center opacity-30">
-                    <AlertCircle className="mb-2 w-6 h-6" />
-                    <p className="font-bold text-[10px] uppercase tracking-widest">
-                      No Data Selected
-                    </p>
-                  </div>
-                )}
+                <h1 className="font-extrabold text-slate-900 dark:text-white text-2xl md:text-3xl leading-tight tracking-tight">
+                  {getSingleData?.title}
+                </h1>
               </div>
-            </Card>
+            )}
 
-            <Card className="flex flex-row justify-between items-center bg-transparent p-6 border-zinc-200 dark:border-zinc-800 rounded-[2rem]">
-              <div className="flex items-center gap-3">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-xl w-10 h-10 transition-all"
-                >
-                  <AiFillSound className="w-5 h-5 text-zinc-600" />
-                </Button>
-                <div className="flex flex-col">
-                  <span className="font-bold text-[10px] text-zinc-400 uppercase">Voice</span>
-                  <span className="font-black text-[11px] uppercase">Narration</span>
+            {getSingleData && (
+              <Card className="group relative flex flex-col justify-center items-center bg-transparent p-8 border-zinc-200 dark:border-zinc-800 rounded-[2rem] min-h-55 overflow-hidden transition-all duration-300">
+                <div className="z-10 flex flex-col items-center">
+                  <span className="mb-2 font-plusJakartaSans font-black text-zinc-400 dark:text-zinc-600 uppercase tracking-[0.4em]">
+                    ATS Score
+                  </span>
+                  {parsedData.score ? (
+                    <>
+                      <div className="flex items-baseline font-black text-zinc-900 dark:text-zinc-100 text-7xl lg:text-8xl leading-none tracking-tighter">
+                        <NumberTicker
+                          value={parseInt(parsedData.score)}
+                          className="text-zinc-900 dark:text-zinc-100"
+                        />
+                        <span className="ml-2 font-medium text-zinc-500 text-3xl md:text-4xl select-none">
+                          %
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-zinc-100/50 dark:bg-zinc-900/50 shadow-sm mt-8 px-3 py-1.5 border rounded-full transition-all duration-300">
+                        <span className="font-bold text-[10px] text-zinc-400 uppercase tracking-wider">
+                          Powered by
+                        </span>
+                        <span className="flex items-center gap-1.5 font-extrabold text-xs">
+                          {getSingleData?.model_selection === "groq" ? (
+                            <div className="flex items-center gap-1.5 text-orange-500">
+                              <Zap className="w-3.5 h-3.5 animate-pulse" /> GROQ LPU
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1.5 text-blue-500">
+                              <Sparkles className="w-3.5 h-3.5 animate-pulse" /> GEMINI
+                            </div>
+                          )}
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex flex-col items-center opacity-30">
+                      <AlertCircle className="mb-2 w-6 h-6" />
+                      <p className="font-bold text-[10px] uppercase tracking-widest">
+                        No Data Selected
+                      </p>
+                    </div>
+                  )}
                 </div>
-              </div>
-              {getSingleData && (
+              </Card>
+            )}
+            {/* Voice And Delete Section */}
+            {getSingleData && (
+              <Card className="flex flex-row justify-between items-center bg-transparent p-6 border-zinc-200 dark:border-zinc-800 rounded-[2rem]">
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-xl w-10 h-10 transition-all"
+                  >
+                    <AiFillSound className="w-5 h-5 text-zinc-600" />
+                  </Button>
+                  <div className="flex flex-col">
+                    <span className="font-bold text-[10px] text-zinc-400 uppercase">Voice</span>
+                    <span className="font-black text-[11px] uppercase">Narration</span>
+                  </div>
+                </div>
+
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <button className="group flex flex-col items-end gap-1 px-2 transition-all">
-                      <div className="flex items-center gap-2 text-zinc-400 group-hover:text-red-500">
-                        <Trash2 className="w-4 h-4" />
-                        <span className="font-bold text-[10px] uppercase">Remove Entry</span>
-                      </div>
+                    <button className="group flex items-center gap-2.5 bg-zinc-50/60 hover:bg-red-500/10 dark:bg-zinc-900/40 backdrop-blur-md px-4 py-2 border border-zinc-200 hover:border-red-500/40 dark:border-zinc-700 rounded-xl transition-all duration-300 cursor-pointer">
+                      <Trash2 className="w-4 h-4 text-zinc-500 dark:text-zinc-400 group-hover:text-red-500 group-hover:rotate-12 transition-all" />
+
+                      <span className="hidden sm:block font-bold text-[11px] text-zinc-600 dark:text-zinc-300 group-hover:text-red-500 tracking-[0.08em] transition-colors">
+                        DELETE
+                      </span>
                     </button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent className="rounded-[2.5rem]">
+
+                  <AlertDialogContent className="shadow-2xl border border-zinc-800 rounded-[2rem]">
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Delete forever?</AlertDialogTitle>
+                      {/* Title: Light mode mein dark text, Dark mode mein white text */}
+                      <AlertDialogTitle className="font-semibold text-slate-900 dark:text-slate-50 text-xl">
+                        Delete forever?
+                      </AlertDialogTitle>
+
+                      {/* Description: Light mode mein soft gray, Dark mode mein muted zinc */}
+                      <AlertDialogDescription className="text-slate-600 dark:text-zinc-400 leading-relaxed">
+                        This will permanently remove{" "}
+                        {/* Highlighted text: Light mode mein black, Dark mode mein white */}
+                        <span className="font-semibold text-slate-900 dark:text-zinc-100">
+                          "{getSingleData?.title || "this resume"}"
+                        </span>{" "}
+                        You won't be able to recover this resume data.
+                      </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <AlertDialogFooter>
+
+                    <AlertDialogFooter className="gap-2 mt-4">
+                      {/* Cancel button ko subtle rakha taaki Delete focus mein rahe */}
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
+
                       <AlertDialogAction
                         onClick={() => handleDelete(getSingleData.id)}
-                        className="bg-red-500"
+                        className="bg-red-600 hover:bg-red-700 shadow-lg shadow-red-900/20 font-medium text-white transition-colors"
                       >
                         Delete
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
-              )}
-            </Card>
+              </Card>
+            )}
 
+            {/* Result Section */}
             <Card className="relative bg-transparent p-8 lg:p-12 border-zinc-200 dark:border-zinc-800 rounded-[2rem]">
               <div className="flex items-center gap-4 mb-8">
                 <div className="bg-zinc-100 dark:bg-zinc-900 p-3 rounded-2xl">
@@ -311,9 +345,9 @@ const Page = () => {
                 <h2 className="font-bold text-2xl tracking-tight">Required Optimizations</h2>
               </div>
               <div className="relative ml-2 pl-8">
-                <div className="top-0 bottom-0 left-0 absolute bg-zinc-200 dark:bg-zinc-800 w-0.5" />
+                <div className="top-0 bottom-0 left-0 absolute bg-linear-to-b from-transparent via-zinc-200 dark:via-zinc-800 to-transparent w-0.5" />
                 <TypingAnimation
-                  key={activeId}
+                  key={`${activeId}-${parsedData.points?.length ?? 0}`}
                   className="font-medium text-[14px] text-zinc-600 dark:text-zinc-300 leading-8 whitespace-pre-line"
                   duration={5}
                 >

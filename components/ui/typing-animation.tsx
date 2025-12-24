@@ -33,7 +33,7 @@ export function TypingAnimation({
   pauseDelay = 1000,
   loop = false,
   as: Component = "span",
-  startOnView = true,
+  startOnView = false,
   showCursor = true,
   blinkCursor = true,
   cursorStyle = "line",
