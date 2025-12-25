@@ -4,37 +4,69 @@ import { useAnalysis } from "@/hooks/useAnalysis";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { AlertCircle, ArrowLeft, History, Sparkles, Zap } from "lucide-react";
-import { useEffect } from "react";
+import { use, useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import PageLoader from "@/components/ui/custom-animated-loader";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { Button } from "@/components/ui/button";
+import { supabaseClient } from "@/lib/supabaseClient";
 
-const AnalysisResult = () => {
-  const { analysisData } = useAnalysis();
+type UserType = {
+  created_at: string;
+  fetchid: string;
+  id: number;
+  job_description: string;
+  model_selection: string;
+  result: string;
+  title: string;
+  user_id: string;
+};
+
+export function AnalysisResult({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
   const { user, isLoading } = useAuth();
   const router = useRouter();
+  const [userData, setUserData] = useState<UserType | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const fetchData = async () => {
+    setLoading(true);
+    const { data, error } = await supabaseClient
+      .from("resumeai")
+      .select("*")
+      .eq("fetchid", slug)
+      .maybeSingle();
+
+    setUserData(data);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    if (!analysisData || !user) {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (!user) {
       router.replace("/fileshare");
     }
-  }, [analysisData, router, user]);
+  }, [router, user]);
+
+  const result = userData?.result;
 
   // Required Optimizations
-  const sMatch = analysisData?.match(/ATS SCORE:\s*(\d+)/i);
-  const pPart = analysisData?.split(/IMPROVEMENT POINTS:/i)[1];
+  const sMatch = result?.match(/ATS SCORE:\s*(\d+)/i);
+  const pPart = result?.split(/IMPROVEMENT POINTS:/i)[1];
   const score = sMatch ? sMatch[1] : null;
-  const points = pPart ? pPart.trim() : analysisData;
+  const points = pPart ? pPart.trim() : result;
 
-  if (!user || isLoading) return <PageLoader />;
+  if (!user || isLoading || loading) return <PageLoader />;
 
   return (
     <div className="mx-auto p-6 max-w-7xl overflow-x-auto text-zinc-900 dark:text-zinc-100 animate-in duration-900 fade-in">
       <div className="space-y-8">
         {/* --- HEADER --- */}
-        <header className="flex md:flex-row flex-col justify-between md:items-center gap-6">
+        <header className="flex md:flex-row flex-col md:justify-between md:items-center gap-6">
           <div className="space-y-4">
             <button
               onClick={() => router.replace("/fileshare")}
@@ -43,11 +75,14 @@ const AnalysisResult = () => {
               <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
               Back to fileshare
             </button>
+
             <h1 className="font-black text-4xl lg:text-5xl tracking-tighter">
               Analysis <span className="text-zinc-400 dark:text-zinc-700">Report.</span>
             </h1>
           </div>
-          <div className="flex items-center gap-3">
+
+          {/* ACTION */}
+          <div className="flex md:justify-end">
             <Button
               onClick={() => router.push("/fileshare/history")}
               variant="outline"
@@ -61,7 +96,18 @@ const AnalysisResult = () => {
 
         <div className="gap-8 grid grid-cols-1">
           {/* --- RESULT SECTION --- */}
+
           <div className="flex flex-col gap-8 lg:col-span-2">
+            {userData && (
+              <div className="flex flex-col items-center gap-2 bg-zinc-100/50 dark:bg-zinc-900/80 px-6 py-2 border-red-500 border-l-4 rounded-r-xl w-full text-center">
+                <span className="font-bold text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.3em]">
+                  Resume Title
+                </span>
+                <h1 className="font-extrabold text-slate-900 dark:text-white text-2xl md:text-3xl leading-tight tracking-tight">
+                  {userData?.title}
+                </h1>
+              </div>
+            )}
             {/* SCORE CARD - CLEAN MAGIC UI */}
             <Card className="group relative flex flex-col justify-center items-center bg-transparent p-8 border-zinc-200 dark:border-zinc-800 rounded-[2rem] min-h-55 overflow-hidden transition-all duration-300">
               <div className="z-10 flex flex-col items-center">
@@ -79,6 +125,22 @@ const AnalysisResult = () => {
                       />
                       <span className="ml-2 font-medium text-zinc-500 dark:text-zinc-400 text-3xl md:text-4xl select-none">
                         %
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-zinc-100/50 dark:bg-zinc-900/50 shadow-sm mt-8 px-3 py-1.5 border rounded-full transition-all duration-300">
+                      <span className="font-bold text-[10px] text-zinc-400 uppercase tracking-wider">
+                        Powered by
+                      </span>
+                      <span className="flex items-center gap-1.5 font-extrabold text-xs">
+                        {userData?.model_selection === "groq" ? (
+                          <div className="flex items-center gap-1.5 text-orange-500">
+                            <Zap className="w-3.5 h-3.5 animate-pulse" /> GROQ LPU
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1.5 text-blue-500">
+                            <Sparkles className="w-3.5 h-3.5 animate-pulse" /> GEMINI
+                          </div>
+                        )}
                       </span>
                     </div>
 
@@ -133,7 +195,7 @@ const AnalysisResult = () => {
                     ?.replace(/\*\*/g, "")
                     ?.split("\n")
                     ?.filter(Boolean)
-                    ?.map((l) =>
+                    ?.map((l: string) =>
                       l.includes(":") ? l.replace(/(^.*?):/, (m) => `${m.toUpperCase()}⮕ `) : l
                     )
                     ?.join("\n\n")}
@@ -147,6 +209,6 @@ const AnalysisResult = () => {
       </div>
     </div>
   );
-};
+}
 
 export default AnalysisResult;

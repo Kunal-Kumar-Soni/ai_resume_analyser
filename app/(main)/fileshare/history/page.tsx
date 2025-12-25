@@ -1,5 +1,4 @@
 "use client";
-// ... (Saare imports wahi hain)
 import {
   AlertDialog,
   AlertDialogAction,
@@ -49,10 +48,17 @@ const Page = () => {
       const { data: allData, error } = await supabaseClient
         .from("resumeai")
         .select("*")
-        .eq("user_id", user.id) // Filter by user
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
+
+      //delete data if data.length should be larger than 10
+      if (allData && allData.length > 10) {
+        const oldestItem = allData[allData.length - 1];
+
+        await supabaseClient.from("resumeai").delete().eq("id", oldestItem.id);
+      }
 
       if (allData && allData.length > 0) {
         setGetAllData(allData);
@@ -109,7 +115,7 @@ const Page = () => {
     return { score: scoreVal, points: formatted };
   }, [getSingleData]);
 
-  // Rest of the logic (handleDelete, Auth Guard, handleSelection) same as yours...
+  // FIX 2: Rest of the logic (handleDelete, Auth Guard, handleSelection) same as yours...
   const handleDelete = async (id: number) => {
     try {
       const { error } = await supabaseClient.from("resumeai").delete().eq("id", id);
@@ -174,7 +180,7 @@ const Page = () => {
                     className={`relative flex items-center gap-4 p-4 border-2 rounded-2xl transition-all duration-300 cursor-pointer ${
                       activeId === data.id
                         ? "border-zinc-900 dark:border-zinc-100 bg-zinc-50 dark:bg-zinc-900 translate-x-1"
-                        : "border-zinc-100 dark:border-zinc-800/60 hover:border-zinc-300 bg-transparent"
+                        : "border-zinc-100 dark:border-zinc-800/60 hover:border-zinc-300 dark:hover:border-zinc-300 bg-transparent"
                     }`}
                   >
                     <div
@@ -203,8 +209,8 @@ const Page = () => {
                     <div
                       className={`p-2 rounded-lg ${
                         activeId === data.id
-                          ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900"
-                          : "opacity-0 group-hover:opacity-100"
+                          ? "bg-zinc-900 dark:bg-zinc-100 text-white  dark:text-zinc-900"
+                          : "opacity-0 group-hover:opacity-100 "
                       }`}
                     >
                       <FaArrowRight className="w-2.5 h-2.5" />
@@ -262,6 +268,23 @@ const Page = () => {
                           )}
                         </span>
                       </div>
+                      <div className="flex items-center gap-2 mt-6">
+                        <div className="relative flex w-2 h-2">
+                          <span
+                            className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                              parseInt(parsedData?.score) > 70 ? "bg-emerald-400" : "bg-amber-400"
+                            }`}
+                          />
+                          <span
+                            className={`relative inline-flex rounded-full h-2 w-2 ${
+                              parseInt(parsedData?.score) > 70 ? "bg-emerald-500" : "bg-amber-500"
+                            }`}
+                          />
+                        </div>
+                        <p className="font-bold text-[10px] text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
+                          {parseInt(parsedData?.score) > 70 ? "Optimal Match" : "Below Threshold"}
+                        </p>
+                      </div>
                     </>
                   ) : (
                     <div className="flex flex-col items-center opacity-30">
@@ -293,10 +316,10 @@ const Page = () => {
 
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <button className="group flex items-center gap-2.5 bg-zinc-50/60 hover:bg-red-500/10 dark:bg-zinc-900/40 backdrop-blur-md px-4 py-2 border border-zinc-200 hover:border-red-500/40 dark:border-zinc-700 rounded-xl transition-all duration-300 cursor-pointer">
-                      <Trash2 className="w-4 h-4 text-zinc-500 dark:text-zinc-400 group-hover:text-red-500 group-hover:rotate-12 transition-all" />
+                    <button className="group flex items-center gap-2.5 bg-zinc-50/60 hover:bg-red-500/10 dark:bg-zinc-900/40 dark:hover:bg-red-500/10 backdrop-blur-md px-4 py-2 border border-zinc-200 hover:border-red-500/40 dark:border-zinc-700 dark:hover:border-red-500/40 rounded-xl transition-all duration-300 cursor-pointer">
+                      <Trash2 className="w-4 h-4 text-zinc-500 dark:group-hover:text-red-500 dark:text-zinc-400 group-hover:text-red-500 group-hover:rotate-12 transition-all" />
 
-                      <span className="hidden sm:block font-bold text-[11px] text-zinc-600 dark:text-zinc-300 group-hover:text-red-500 tracking-[0.08em] transition-colors">
+                      <span className="hidden sm:block font-bold text-[11px] text-zinc-600 dark:group-hover:text-red-500 dark:text-zinc-300 group-hover:text-red-500 tracking-[0.08em] transition-colors">
                         DELETE
                       </span>
                     </button>

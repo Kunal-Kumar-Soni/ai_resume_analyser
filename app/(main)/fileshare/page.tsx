@@ -98,10 +98,7 @@ const PDFUploadSleek = () => {
     setExtractedText("");
   };
 
-  // 1. Pehle extension hatao (taki clean name mile)
   let cleanName = file?.name.replace(/\.[^/.]+$/, "") || "Untitled";
-
-  // 2. Phir check karo agar .pdf nahi hai toh laga do
   let finalTitle = cleanName.endsWith(".pdf") ? cleanName : `${cleanName}.pdf`;
 
   // Execute Analysis with Model Switching
@@ -120,8 +117,8 @@ const PDFUploadSleek = () => {
 
       if (res.success) {
         setAnalysisData(res.output);
-        router.replace("fileshare/analysis-result");
 
+        const fetchid = crypto.randomUUID();
         const { data, error } = await supabaseClient
           .from("resumeai")
           .insert({
@@ -129,6 +126,7 @@ const PDFUploadSleek = () => {
             model_selection: selectedModel,
             title: finalTitle,
             result: res.output,
+            fetchid: fetchid,
           })
           .select()
           .single();
@@ -136,8 +134,10 @@ const PDFUploadSleek = () => {
         if (error) {
           console.log("Error:", error.message);
         } else {
-          console.log("Success! Inserted Data:", data); // Ab yahan data dikhega
+          console.log("Success! Inserted Data:", data);
         }
+
+        router.replace(`fileshare/${fetchid}`);
       } else {
         const toastId = toast.error(res?.error, {
           action: { label: "Cancel", onClick: () => toast.dismiss(toastId) },
