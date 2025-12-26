@@ -33,6 +33,23 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
   const { user, isLoading } = useAuth();
   const router = useRouter();
 
+  // Error Toast Function
+  const showFetchError = (text: string) =>
+    toast.error(text, {
+      action: {
+        label: "Cancel",
+        onClick: () => toast.dismiss(),
+      },
+    });
+  // Success Toast Function
+  const showFetchSuccess = (text: string) =>
+    toast.success(text, {
+      action: {
+        label: "Cancel",
+        onClick: () => toast.dismiss(),
+      },
+    });
+
   //get error message from supabase auth error
   const getSignupErrorMessage = (error: any) => {
     const msg = error?.message?.toLowerCase() || "";
@@ -46,12 +63,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
     if (formData?.password !== formData?.confirmPassword) {
-      const toastId = toast.error("Passwords do not match", {
-        action: {
-          label: "Cancel",
-          onClick: () => toast.dismiss(toastId),
-        },
-      });
+      showFetchError("Passwords do not match");
       return;
     }
 
@@ -61,49 +73,27 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
     });
 
     if (error) {
-      const toastId = toast.error(getSignupErrorMessage(error), {
-        action: {
-          label: "Cancel",
-          onClick: () => toast.dismiss(toastId),
-        },
-      });
+      showFetchError(getSignupErrorMessage(error));
       return;
     }
 
-    const toastId = toast.success("Account created successfully", {
-      action: {
-        label: "Cancel",
-        onClick: () => toast.dismiss(toastId),
-      },
-    });
-
+    showFetchSuccess("Account created successfully.");
     router.replace("/");
   };
 
   const onError = (errors: any) => {
-    const toastId = toast.error(
+    showFetchError(
       errors?.email?.message ||
         errors?.password?.message ||
         errors?.confirmPassword?.message ||
-        "Validation errorconst toastId = ",
-      {
-        action: {
-          label: "Cancel",
-          onClick: () => toast.dismiss(toastId),
-        },
-      }
+        "Please fix the highlighted fields."
     );
   };
 
   const handleGoogleSignup = async () => {
     const { error } = await supabaseClient.auth.signInWithOAuth({ provider: "google" });
     if (error) {
-      const toastId = toast.error("Google login failed", {
-        action: {
-          label: "Cancel",
-          onClick: () => toast.dismiss(toastId),
-        },
-      });
+      showFetchError("Google login failed");
     }
   };
 
@@ -111,7 +101,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
     if (user && !isLoading) {
       router.replace("/");
     }
-  }, [user]);
+  }, [user, isLoading, router]);
 
   //for loading purpose
   if (isLoading) {

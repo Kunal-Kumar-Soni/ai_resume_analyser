@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { AiFillSound } from "react-icons/ai";
+import { toast } from "sonner";
 
 type getDataType = {
   created_at: string;
@@ -41,6 +42,15 @@ const Page = () => {
   const router = useRouter();
   const { user, isLoading: authLoading } = useAuth();
 
+  // Error Function
+  const showFetchError = (text: string) =>
+    toast.error(text, {
+      action: {
+        label: "Cancel",
+        onClick: () => toast.dismiss(),
+      },
+    });
+
   // FIX 1: Added user.id filter and auto-select
   const fetchData = useCallback(async () => {
     if (!user?.id) return;
@@ -51,13 +61,23 @@ const Page = () => {
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        showFetchError("Unable to load your resume history.");
+        return;
+      }
 
       //delete data if data.length should be larger than 10
       if (allData && allData.length > 10) {
         const oldestItem = allData[allData.length - 1];
 
-        await supabaseClient.from("resumeai").delete().eq("id", oldestItem.id);
+        const { error: deleteError } = await supabaseClient
+          .from("resumeai")
+          .delete()
+          .eq("id", oldestItem.id);
+
+        if (deleteError) {
+          showFetchError("Cleanup failed. Please refresh.");
+        }
       }
 
       if (allData && allData.length > 0) {
@@ -70,7 +90,7 @@ const Page = () => {
         setGetAllData([]);
       }
     } catch (error) {
-      console.error("Fetch Error:", error);
+      showFetchError("Unable to load your resume history.");
     } finally {
       setLoading(false);
     }
@@ -119,12 +139,15 @@ const Page = () => {
   const handleDelete = async (id: number) => {
     try {
       const { error } = await supabaseClient.from("resumeai").delete().eq("id", id);
-      if (error) throw error;
+      if (error) {
+        showFetchError("Failed to delete resume.");
+        return;
+      }
       const updated = getAllData?.filter((item) => item.id !== id) || null;
       setGetAllData(updated);
       if (activeId === id) setActiveId(updated && updated.length > 0 ? updated[0].id : null);
     } catch (error) {
-      alert("Failed to delete");
+      showFetchError("Failed to delete resume.");
     }
   };
 

@@ -57,6 +57,6 @@ export async function generateAiResumeFromGroq(resumeText: string, jobDescriptio
     return { success: true, output: response.choices[0]?.message?.content || "" };
   } catch (error: any) {
     console.error("Groq Error:", error);
-    return { success: false, error: "Groq is currently busy. Please try again." };
+    return { success: false, error: "Groq is currently busy!" };
   }
 }

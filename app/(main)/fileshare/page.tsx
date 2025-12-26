@@ -45,6 +45,15 @@ const PDFUploadSleek = () => {
   const { user, isLoading } = useAuth();
   const router = useRouter();
 
+  // Error Function
+  const showFetchError = (text: string) =>
+    toast.error(text, {
+      action: {
+        label: "Cancel",
+        onClick: () => toast.dismiss(),
+      },
+    });
+
   const processFile = async (selectedFile: File) => {
     if (!selectedFile || selectedFile.type !== "application/pdf") return;
     setFile(selectedFile);
@@ -60,6 +69,7 @@ const PDFUploadSleek = () => {
       }
       setExtractedText(text);
     } catch (err) {
+      showFetchError("Unable to parse data!");
       setFile(null);
     } finally {
       setIsParsing(false);
@@ -112,7 +122,7 @@ const PDFUploadSleek = () => {
 
       if (res.success) {
         const fetchid = crypto.randomUUID();
-        const { data, error } = await supabaseClient
+        const { error } = await supabaseClient
           .from("resumeai")
           .insert({
             job_description: jobDescription,
@@ -125,22 +135,18 @@ const PDFUploadSleek = () => {
           .single();
 
         if (error) {
-          console.log("Error:", error.message);
-        } else {
-          console.log("Success! Inserted Data:", data);
+          showFetchError("Failed to save resume!");
+          setLoading(false);
+          return;
         }
 
         router.replace(`fileshare/${fetchid}`);
       } else {
-        const toastId = toast.error(res?.error, {
-          action: { label: "Cancel", onClick: () => toast.dismiss(toastId) },
-        });
+        showFetchError(res?.error ?? "Analysis failed. Please try again!");
         setLoading(false);
       }
     } catch (error) {
-      const toastId = toast.error("Execution failed. Please try again.", {
-        action: { label: "Cancel", onClick: () => toast.dismiss(toastId) },
-      });
+      showFetchError("Execution failed. Please try again!");
       setLoading(false);
     }
   };

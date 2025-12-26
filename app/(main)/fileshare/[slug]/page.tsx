@@ -30,8 +30,9 @@ export function AnalysisResult({ params }: { params: Promise<{ slug: string }> }
   const [userData, setUserData] = useState<UserType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const showFetchError = () =>
-    toast.error("Unable to fetch data", {
+  // Error Toast Function
+  const showFetchError = (text: string) =>
+    toast.error(text, {
       action: {
         label: "Cancel",
         onClick: () => toast.dismiss(),
@@ -49,12 +50,16 @@ export function AnalysisResult({ params }: { params: Promise<{ slug: string }> }
         .maybeSingle();
 
       if (error) {
-        showFetchError();
+        showFetchError("Unable to load resume data.");
+        return;
+      }
+      if (!data) {
+        showFetchError("Resume not found.");
         return;
       }
       setUserData(data);
     } catch {
-      showFetchError();
+      showFetchError("Load failed. Please retry.");
     } finally {
       setLoading(false);
     }

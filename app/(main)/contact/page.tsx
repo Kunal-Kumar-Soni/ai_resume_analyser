@@ -11,6 +11,15 @@ const ContactUs = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // Error Toast Function
+  const showFetchError = (text: string) =>
+    toast.error(text, {
+      action: {
+        label: "Cancel",
+        onClick: () => toast.dismiss(),
+      },
+    });
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -34,20 +43,10 @@ const ContactUs = () => {
         (e.target as HTMLFormElement).reset();
       } else {
         const errorData = await response.json();
-        const toastId = toast.error(errorData.error || "Submission failed.", {
-          action: {
-            label: "Cancel",
-            onClick: () => toast.dismiss(toastId),
-          },
-        });
+        showFetchError(errorData.error || "Submission failed!");
       }
     } catch (error) {
-      const toastId = toast.error("Network error. Please try again.", {
-        action: {
-          label: "Cancel",
-          onClick: () => toast.dismiss(toastId),
-        },
-      });
+      showFetchError("Network error. Please try again!");
     } finally {
       setIsSubmitting(false);
       setTimeout(() => setIsSuccess(false), 4000);

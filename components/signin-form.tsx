@@ -31,6 +31,23 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
   const { user, isLoading } = useAuth();
   const router = useRouter();
 
+  // Error Toast Function
+  const showFetchError = (text: string) =>
+    toast.error(text, {
+      action: {
+        label: "Cancel",
+        onClick: () => toast.dismiss(),
+      },
+    });
+  // Success Toast Function
+  const showFetchSuccess = (text: string) =>
+    toast.success(text, {
+      action: {
+        label: "Cancel",
+        onClick: () => toast.dismiss(),
+      },
+    });
+
   //get error message from supabase auth error
   const getAuthErrorMessage = (error: any) => {
     if (!error) return "Something went wrong. Please try again.";
@@ -55,46 +72,23 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
     });
 
     if (error) {
-      const toastId = toast.error(getAuthErrorMessage(error), {
-        action: {
-          label: "Cancel",
-          onClick: () => toast.dismiss(toastId),
-        },
-      });
+      showFetchError(getAuthErrorMessage(error));
       return;
     }
 
-    const toastId = toast.success("Login successfully", {
-      action: {
-        label: "Cancel",
-        onClick: () => toast.dismiss(toastId),
-      },
-    });
+    showFetchSuccess("Logged in successfully.");
 
     router.replace("/");
   };
 
   const onError = (errors: any) => {
-    const toastId = toast.error(
-      errors?.email?.message || errors?.password?.message || "Validation error",
-      {
-        action: {
-          label: "Cancel",
-          onClick: () => toast.dismiss(toastId),
-        },
-      }
-    );
+    showFetchError(errors?.email?.message || errors?.password?.message || "Validation error");
   };
 
   const handleGoogleSignup = async () => {
     const { error } = await supabaseClient.auth.signInWithOAuth({ provider: "google" });
     if (error) {
-      const toastId = toast.error("Google login failed", {
-        action: {
-          label: "Cancel",
-          onClick: () => toast.dismiss(toastId),
-        },
-      });
+      showFetchError("Google login failed");
     }
   };
 
@@ -102,7 +96,7 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
     if (user && !isLoading) {
       router.replace("/");
     }
-  }, [user]);
+  }, [user, isLoading, router]);
 
   //for loading purpose
   if (isLoading) {

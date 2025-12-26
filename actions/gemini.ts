@@ -48,6 +48,6 @@ export async function generateAiResumeFromGemini(resumeText: string, jobDescript
 
     return { success: true, output: response.text };
   } catch (error: any) {
-    return { success: false, error: "Gemini is currently busy. Please try again." };
+    return { success: false, error: "Gemini is currently busy!" };
   }
 }
