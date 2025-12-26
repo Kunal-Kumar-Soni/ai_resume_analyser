@@ -11,8 +11,16 @@ const plusJakartaSans = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Resume.AI",
-  description: "Made by Kunal Kumar Soni",
+  title: {
+    default: "Resume.Ai",
+    template: "Resume.Ai | %s",
+  },
+  description: "AI powered resume analyzer for job seekers",
+  keywords: ["resume", "AI resume", "resume analyzer", "job"],
+  authors: [{ name: "Kunal Kumar Soni" }],
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

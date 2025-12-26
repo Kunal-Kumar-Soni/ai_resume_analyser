@@ -2,8 +2,10 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { Separator } from "../ui/separator";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Footer = () => {
+  const router = useRouter();
   return (
     <footer className="relative bg-background py-12 w-full overflow-hidden">
       {/* Subtle Background Glow - Hero match */}
@@ -15,8 +17,11 @@ const Footer = () => {
         <div className="flex md:flex-row flex-col justify-between items-center gap-8 mt-12">
           {/* Brand & Badge */}
           <div className="flex flex-col items-center md:items-start gap-4">
-            <div className="flex items-center gap-2">
-              <div className="flex justify-center items-center bg-primary rounded-lg w-8 h-8">
+            <div
+              onClick={() => router.replace("/")}
+              className="group flex items-center gap-2 cursor-pointer"
+            >
+              <div className="flex justify-center items-center bg-primary rounded-lg w-9 h-9 group-hover:scale-110 transition-transform">
                 <span className="font-black text-white dark:text-black text-xl italic">R</span>
               </div>
               <span className="font-black text-2xl italic tracking-tighter">
