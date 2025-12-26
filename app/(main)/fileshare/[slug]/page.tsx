@@ -1,16 +1,16 @@
 "use client";
 
-import { useAnalysis } from "@/hooks/useAnalysis";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { AlertCircle, ArrowLeft, History, Sparkles, Zap } from "lucide-react";
-import { use, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import PageLoader from "@/components/ui/custom-animated-loader";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { Button } from "@/components/ui/button";
 import { supabaseClient } from "@/lib/supabaseClient";
+import { toast } from "sonner";
 
 type UserType = {
   created_at: string;
@@ -30,21 +30,40 @@ export function AnalysisResult({ params }: { params: Promise<{ slug: string }> }
   const [userData, setUserData] = useState<UserType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchData = async () => {
-    setLoading(true);
-    const { data, error } = await supabaseClient
-      .from("resumeai")
-      .select("*")
-      .eq("fetchid", slug)
-      .maybeSingle();
+  const showFetchError = () =>
+    toast.error("Unable to fetch data", {
+      action: {
+        label: "Cancel",
+        onClick: () => toast.dismiss(),
+      },
+    });
 
-    setUserData(data);
-    setLoading(false);
-  };
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabaseClient
+        .from("resumeai")
+        .select("*")
+        .eq("fetchid", slug)
+        .maybeSingle();
+
+      if (error) {
+        showFetchError();
+        return;
+      }
+      setUserData(data);
+    } catch {
+      showFetchError();
+    } finally {
+      setLoading(false);
+    }
+  }, [slug]);
 
   useEffect(() => {
+    if (!slug) return;
     fetchData();
-  }, []);
+  }, [slug, fetchData]);
 
   useEffect(() => {
     if (!user) {

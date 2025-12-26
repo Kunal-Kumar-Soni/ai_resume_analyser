@@ -162,7 +162,7 @@ const Page = () => {
             <div className="p-6 border-zinc-100 dark:border-zinc-800/50 border-b shrink-0">
               <div className="flex justify-between items-center">
                 <p className="font-bold text-[11px] text-zinc-500 uppercase tracking-[0.2em]">
-                  Analysis History
+                  History Stack
                 </p>
                 <span className="bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-full font-bold text-[10px] text-zinc-400">
                   {getAllData?.length || 0}/10

@@ -4,7 +4,6 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/context/AuthProvider";
 import { ThemeProvider } from "@/components/theme-provider";
-import AnalysisProvider from "@/context/AnalysisProvider";
 
 const plusJakartaSans = Geist_Mono({
   variable: "--font-plus-jakarta-sans",
@@ -31,10 +30,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <AnalysisProvider>
-              <Toaster position="top-center" duration={3000} theme="system" />
-              {children}
-            </AnalysisProvider>
+            <Toaster position="top-center" duration={3000} theme="system" />
+            {children}
           </AuthProvider>
         </ThemeProvider>
       </body>

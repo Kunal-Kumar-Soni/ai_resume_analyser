@@ -22,7 +22,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { generateAiResumeFromGemini } from "@/actions/gemini";
 import { Spinner } from "@/components/ui/spinner";
-import { useAnalysis } from "@/hooks/useAnalysis";
 import { toast } from "sonner";
 import { generateAiResumeFromGroq } from "@/actions/groq";
 import {
@@ -41,14 +40,10 @@ const PDFUploadSleek = () => {
   const [jobDescription, setJobDescription] = useState<string>("");
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [selectedModel, setSelectedModel] = useState<string>("groq");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { user, isLoading } = useAuth();
-  const { setAnalysisData, isAnalysisDataLoading, setIsAnalysisDataLoading } = useAnalysis();
   const router = useRouter();
-
-  useEffect(() => {
-    setIsAnalysisDataLoading(false);
-  }, [setIsAnalysisDataLoading]);
 
   const processFile = async (selectedFile: File) => {
     if (!selectedFile || selectedFile.type !== "application/pdf") return;
@@ -104,7 +99,7 @@ const PDFUploadSleek = () => {
   // Execute Analysis with Model Switching
   const handleExecuteAnalysis = async () => {
     if (!extractedText) return;
-    setIsAnalysisDataLoading(true);
+    setLoading(true);
 
     try {
       // Model selection logic
@@ -116,8 +111,6 @@ const PDFUploadSleek = () => {
       }
 
       if (res.success) {
-        setAnalysisData(res.output);
-
         const fetchid = crypto.randomUUID();
         const { data, error } = await supabaseClient
           .from("resumeai")
@@ -142,13 +135,13 @@ const PDFUploadSleek = () => {
         const toastId = toast.error(res?.error, {
           action: { label: "Cancel", onClick: () => toast.dismiss(toastId) },
         });
-        setIsAnalysisDataLoading(false);
+        setLoading(false);
       }
     } catch (error) {
       const toastId = toast.error("Execution failed. Please try again.", {
         action: { label: "Cancel", onClick: () => toast.dismiss(toastId) },
       });
-      setIsAnalysisDataLoading(false);
+      setLoading(false);
     }
   };
 
@@ -158,7 +151,7 @@ const PDFUploadSleek = () => {
     }
   }, [user, isLoading, router]);
 
-  if (isLoading || !user || isAnalysisDataLoading) {
+  if (isLoading || !user || loading) {
     return <PageLoader />;
   }
 
