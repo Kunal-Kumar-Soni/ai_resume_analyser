@@ -5,31 +5,32 @@ const reviews = [
   {
     name: "Rohit Singh",
     username: "Software Engineer",
-    body: "The resume feedback felt personalized and relevant to my job role. It’s a great tool for freshers and working professionals.",
+    body: "The resume feedback felt personalized and well matched to my job role. The suggestions were clear, practical, and useful for improving my resume.",
     img: "https://media.istockphoto.com/id/543653998/photo/thumbs-up.jpg?s=2048x2048&w=is&k=20&c=c012xQqclOoifYZeFHyGPUURdSUV4Sr7TXII9eQI6S8=",
   },
+
   {
     name: "Neha Verma",
     username: "HR Executive",
-    body: "I found the resume analysis very accurate from a recruiter’s perspective. It highlights strengths clearly and improves weak areas.",
-    img: "https://images.unsplash.com/photo-1696960181436-1b6d9576354e?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    body: "From a recruiter’s perspective, the resume analysis felt accurate and relevant. It highlighted strengths clearly and pointed out common gaps that candidates often miss.",
+    img: "https://images.unsplash.com/photo-1696960181436-1b6d9576354e?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0",
   },
   {
     name: "Amit Sharma",
     username: "Frontend Developer",
-    body: "This platform helped me improve my resume clarity and structure. The AI suggestions were practical and easy to apply.",
+    body: "This platform helped improve my resume structure and overall clarity. The AI suggestions were practical, easy to follow, and didn’t feel generic or overcomplicated.",
     img: "https://media.istockphoto.com/id/1397127604/photo/asian-businessman-portrait-looking-at-camera-smiling-and-laughing.jpg?s=2048x2048&w=is&k=20&c=rACBrsu0PEDmrgQDpMAfohfJN7cFVHkpIBwl9qF0lCY=",
   },
   {
     name: "Priya Mehta",
     username: "Data Analyst",
-    body: "The insights helped me tailor my resume for analytics roles. It clearly pointed out missing skills and improved keyword relevance.",
-    img: "https://images.unsplash.com/photo-1634316887741-93ff860c6854?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    body: "The insights helped me tailor my resume for analytics roles. It pointed out missing skills and improved keyword usage, which made the resume more relevant.",
+    img: "https://images.unsplash.com/photo-1634316887741-93ff860c6854?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0",
   },
   {
     name: "Rahul Kapoor",
     username: "Product Manager",
-    body: "The AI-driven suggestions made my resume more impact-focused. It helped me highlight achievements instead of just responsibilities.",
+    body: "The AI suggestions helped me focus more on impact and achievements. It improved how my responsibilities were presented and made the resume stronger overall.",
     img: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?q=80&w=880&auto=format&fit=crop",
   },
 ];

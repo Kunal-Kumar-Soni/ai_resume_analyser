@@ -39,10 +39,14 @@ const Page = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [activeId, setActiveId] = useState<number | null>(null);
   const resultSectionRef = useRef<HTMLDivElement>(null);
+
+  //Voice
+  const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+
   const router = useRouter();
   const { user, isLoading: authLoading } = useAuth();
 
-  // Error Function
+  // Error Toast Function
   const showFetchError = (text: string) =>
     toast.error(text, {
       action: {
@@ -66,7 +70,7 @@ const Page = () => {
         return;
       }
 
-      //delete data if data.length should be larger than 10
+      //Delete data if data.length should be larger than 10
       if (allData && allData.length > 10) {
         const oldestItem = allData[allData.length - 1];
 
@@ -159,6 +163,63 @@ const Page = () => {
     setActiveId(id);
     resultSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  /// Voice Functions
+  const getVoice = () => {
+    const voices = window.speechSynthesis.getVoices();
+    return voices.find((v) => v.lang === "hi-IN") || null;
+  };
+
+  const speakText = () => {
+    const text = parsedData?.points;
+    if (!text) {
+      showFetchError("No content available for narration");
+      return;
+    }
+
+    // toggle: stop if already speaking
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    utterance.lang = "hi-IN";
+    const hindiVoice = getVoice();
+    if (hindiVoice) utterance.voice = hindiVoice;
+
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // load voices
+  useEffect(() => {
+    window.speechSynthesis.onvoiceschanged = () => {
+      window.speechSynthesis.getVoices();
+    };
+  }, []);
+
+  // stop when history data change
+  useEffect(() => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+  }, [activeId]);
+
+  //stop when page reload
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, []);
 
   if (loading || authLoading) return <PageLoader />;
 
@@ -325,15 +386,30 @@ const Page = () => {
               <Card className="flex flex-row justify-between items-center bg-transparent p-6 border-zinc-200 dark:border-zinc-800 rounded-[2rem]">
                 <div className="flex items-center gap-3">
                   <Button
+                    title="Voice"
                     variant="outline"
                     size="icon"
-                    className="rounded-xl w-10 h-10 transition-all"
+                    onClick={speakText}
+                    className={`rounded-xl w-10 cursor-pointer h-10 transition-all duration-200 hover:scale-110 hover:shadow-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 active:scale-95
+                    ${
+                      isSpeaking
+                        ? "shadow-md shadow-zinc-900/10 dark:shadow-black/40"
+                        : "border-zinc-200 dark:border-zinc-800"
+                    }
+                      `}
                   >
-                    <AiFillSound className="w-5 h-5 text-zinc-600" />
+                    <AiFillSound
+                      className={`w-5 h-5 transition-colors ${
+                        isSpeaking
+                          ? "text-emerald-600 dark:text-emerald-500 animate-pulse"
+                          : "text-zinc-600"
+                      }`}
+                    />
                   </Button>
                   <div className="flex flex-col">
-                    <span className="font-bold text-[10px] text-zinc-400 uppercase">Voice</span>
-                    <span className="font-black text-[11px] uppercase">Narration</span>
+                    <span className="hidden sm:block font-bold text-[11px] text-zinc-400 uppercase">
+                      Voice
+                    </span>
                   </div>
                 </div>
 
@@ -342,7 +418,7 @@ const Page = () => {
                     <button className="group flex items-center gap-2.5 bg-zinc-50/60 hover:bg-red-500/10 dark:bg-zinc-900/40 dark:hover:bg-red-500/10 backdrop-blur-md px-4 py-2 border border-zinc-200 hover:border-red-500/40 dark:border-zinc-700 dark:hover:border-red-500/40 rounded-xl transition-all duration-300 cursor-pointer">
                       <Trash2 className="w-4 h-4 text-zinc-500 dark:group-hover:text-red-500 dark:text-zinc-400 group-hover:text-red-500 group-hover:rotate-12 transition-all" />
 
-                      <span className="hidden sm:block font-bold text-[11px] text-zinc-600 dark:group-hover:text-red-500 dark:text-zinc-300 group-hover:text-red-500 tracking-[0.08em] transition-colors">
+                      <span className="font-bold text-[11px] text-zinc-600 dark:group-hover:text-red-500 dark:text-zinc-300 group-hover:text-red-500 tracking-[0.08em] transition-colors">
                         DELETE
                       </span>
                     </button>
