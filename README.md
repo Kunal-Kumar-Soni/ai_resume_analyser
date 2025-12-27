@@ -1,5 +1,3 @@
-Screenshots
-
 ## 📸 Screenshots
 
 <p align="center">
@@ -54,7 +52,7 @@ This project focuses on **real-world usability**, **clean frontend architecture*
 
 - AI-powered resume feedback
 - Structured suggestions for improvement
-- Clear explanation of strengths and weak areas
+- Clear explanation of strengths
 - Easy-to-understand insights for non-technical users
 
 ### ATS Score Evaluation
@@ -67,16 +65,14 @@ This project focuses on **real-world usability**, **clean frontend architecture*
 ### Voice Feature
 
 - Converts AI feedback into **spoken audio**
-- Allows users to **listen to resume analysis and ATS feedback**
+- Allows users to **listen to resume analysis **
 - Improves accessibility and user experience
-- Integrated with smooth play / pause controls
 
 ### UI / UX
 
 - Clean, minimal, and modern interface
 - Fully responsive for all screen sizes
 - Dark and Light mode support
-- Smooth hover effects and micro-interactions
 
 ### Error Handling
 
@@ -94,7 +90,6 @@ This project focuses on **real-world usability**, **clean frontend architecture*
 - TypeScript
 - Tailwind CSS
 - Shadcn UI / Magic UI
-- Lucide / React Icons
 
 ### Backend & Services
 
