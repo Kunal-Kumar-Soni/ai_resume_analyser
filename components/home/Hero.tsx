@@ -58,7 +58,7 @@ const Hero = () => {
                 </span>
               </Badge>
 
-              <h1 className="font-black text-foreground text-5xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tighter">
+              <h1 className="font-black text-foreground text-5xl md:text-7xl lg:text-8xl leading-14 sm:leading-[0.95] tracking-tighter">
                 Smart Suggestions. <br />
                 <span className="bg-clip-text bg-linear-to-r from-primary via-blue-500 to-cyan-400 text-transparent">
                   Better Interviews.
@@ -66,8 +66,8 @@ const Hero = () => {
               </h1>
 
               <p className="max-w-2xl font-medium text-muted-foreground text-lg md:text-xl italic leading-relaxed">
-                "Stop sending generic resumes. Get personalized AI feedback to fix gaps, quantify
-                achievements, and align perfectly with any job description."
+                "Stop sending generic resumes. Get AI-powered feedback to fix gaps and align with
+                any job description instantly."
               </p>
             </div>
 

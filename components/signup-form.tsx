@@ -15,6 +15,7 @@ import { MdOutlineVerifiedUser } from "react-icons/md";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 import PageLoader from "./ui/custom-animated-loader";
+import { ArrowLeft } from "lucide-react";
 
 type Inputs = {
   name: string;
@@ -129,6 +130,16 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
       )}
       {...props}
     >
+      {/* Clean Responsive Back Button */}
+      <div className="top-4 md:top-10 left-4 md:left-10 md:absolute mb-6 md:mb-0 w-full md:w-auto">
+        <Link href="/">
+          <div className="group flex items-center gap-2 font-bold text-[10px] text-zinc-400 hover:text-black dark:hover:text-white uppercase tracking-[0.2em] transition-all">
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+            Back to Home
+          </div>
+        </Link>
+      </div>
+
       {/* Branding Section */}
       <div className="flex flex-col items-center gap-4 mb-4 w-full max-w-2xl text-center">
         <div className="group relative">
