@@ -89,7 +89,7 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
     const { error } = await supabaseClient.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}`,
         queryParams: {
           prompt: "select_account",
         },
