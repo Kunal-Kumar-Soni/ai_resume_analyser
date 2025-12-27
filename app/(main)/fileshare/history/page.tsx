@@ -63,6 +63,8 @@ const Page = () => {
         .from("resumeai")
         .select("*")
         .eq("user_id", user.id)
+        .not("result", "is", null)
+        .neq("result", "")
         .order("created_at", { ascending: false });
 
       if (error) {
