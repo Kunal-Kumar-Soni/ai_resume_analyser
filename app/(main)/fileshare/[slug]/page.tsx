@@ -31,9 +31,6 @@ export function AnalysisResult({ params }: { params: Promise<{ slug: string }> }
   const [userData, setUserData] = useState<UserType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  //Voice
-  const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
-
   // Error Toast Function
   const showFetchError = (text: string) =>
     toast.error(text, {
@@ -79,55 +76,6 @@ export function AnalysisResult({ params }: { params: Promise<{ slug: string }> }
       router.replace("/fileshare");
     }
   }, [router, user]);
-
-  /// Voice Functions
-  const getVoice = () => {
-    const voices = window.speechSynthesis.getVoices();
-    return voices.find((v) => v.lang === "hi-IN") || null;
-  };
-
-  const speakText = () => {
-    if (!points) {
-      showFetchError("No content available for narration");
-      return;
-    }
-
-    // toggle: stop if already speaking
-    if (window.speechSynthesis.speaking) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(points);
-
-    utterance.lang = "hi-IN";
-    const hindiVoice = getVoice();
-    if (hindiVoice) utterance.voice = hindiVoice;
-
-    utterance.rate = 0.95;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-
-    window.speechSynthesis.speak(utterance);
-  };
-
-  // load voices
-  useEffect(() => {
-    window.speechSynthesis.onvoiceschanged = () => {
-      window.speechSynthesis.getVoices();
-    };
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      window.speechSynthesis.cancel();
-    };
-  }, []);
 
   const result = userData?.result;
 
@@ -254,30 +202,6 @@ export function AnalysisResult({ params }: { params: Promise<{ slug: string }> }
             {/* IMPROVEMENTS CARD */}
             <Card className="relative bg-transparent p-8 lg:p-12 border-zinc-200 dark:border-zinc-800 rounded-[2rem]">
               <div className="flex items-center gap-4 mb-8">
-                <div className="top-8 right-8 absolute">
-                  <Button
-                    title="Voice"
-                    variant="outline"
-                    size="icon"
-                    onClick={speakText}
-                    className={`rounded-xl w-10 cursor-pointer h-10 transition-all duration-200 hover:scale-110 hover:shadow-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 active:scale-95
-                    ${
-                      isSpeaking
-                        ? "shadow-md shadow-zinc-900/10 dark:shadow-black/40"
-                        : "border-zinc-200 dark:border-zinc-800"
-                    }
-                      `}
-                  >
-                    <AiFillSound
-                      className={`w-5 h-5 transition-colors ${
-                        isSpeaking
-                          ? "text-emerald-600 dark:text-emerald-500 animate-pulse"
-                          : "text-zinc-600"
-                      }`}
-                    />
-                  </Button>
-                </div>
-
                 <div className="bg-zinc-100 dark:bg-zinc-900 p-3 border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl">
                   <Zap className="w-6 h-6 text-zinc-900 dark:text-zinc-100" fill="currentColor" />
                 </div>
