@@ -91,7 +91,13 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
   };
 
   const handleGoogleSignup = async () => {
-    const { error } = await supabaseClient.auth.signInWithOAuth({ provider: "google" });
+    const { error } = await supabaseClient.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+      },
+    });
+
     if (error) {
       showFetchError("Google login failed");
     }

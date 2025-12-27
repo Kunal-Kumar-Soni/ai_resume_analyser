@@ -116,7 +116,7 @@ This project focuses on **real-world usability**, **clean frontend architecture*
 ├── app/
 │   ├── (auth)/
 │   ├── (main)/
-│   ├── (api)/
+│   ├── api/
 │   ├── global.css
 │   └── layout.tsx
 ├── components/
@@ -125,9 +125,9 @@ This project focuses on **real-world usability**, **clean frontend architecture*
 │   ├── signin-form
 │   ├── signup-form
 │   └── theme-provider
-├── context
+├── context/
 │   └── AuthProvider
-├── hooks
+├── hooks/
 │   └── useAuth
 ├── lib/
 │   ├── getPDFText
