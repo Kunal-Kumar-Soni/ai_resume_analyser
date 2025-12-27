@@ -116,6 +116,16 @@ export function SigninForm({ className, ...props }: React.ComponentProps<"div">)
     return <PageLoader />;
   }
 
+  useEffect(() => {
+    if (user && !isLoading) {
+      router.replace("/");
+    }
+
+    if (typeof window !== "undefined" && window.location.hash.includes("access_token")) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }, [user, isLoading, router]);
+
   return (
     <div
       className={cn(
