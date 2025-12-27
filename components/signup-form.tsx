@@ -94,12 +94,13 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
     const { error } = await supabaseClient.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+        redirectTo: window.location.origin,
       },
     });
 
     if (error) {
       showFetchError("Google login failed");
+      return;
     }
   };
 
