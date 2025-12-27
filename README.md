@@ -65,7 +65,7 @@ This project focuses on **real-world usability**, **clean frontend architecture*
 ### Voice Feature
 
 - Converts AI feedback into **spoken audio**
-- Allows users to **listen to resume analysis **
+- Allows users to **listen to resume analysis**
 - Improves accessibility and user experience
 
 ### UI / UX
