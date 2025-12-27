@@ -22,7 +22,7 @@ const Footer = () => {
               className="group flex items-center gap-2 cursor-pointer"
             >
               <div className="flex justify-center items-center bg-primary rounded-lg w-9 h-9 group-hover:scale-110 transition-transform">
-                <span className="font-black text-white dark:text-black text-xl italic">R</span>
+                <span className="font-black text-white dark:text-black text-xl">R</span>
               </div>
               <span className="font-black text-2xl italic tracking-tighter">
                 Resume<span className="text-primary not-italic">.AI</span>

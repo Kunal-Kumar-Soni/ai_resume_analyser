@@ -12,8 +12,8 @@ const plusJakartaSans = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Resume.Ai",
-    template: "Resume.Ai | %s",
+    default: "Resume.AI",
+    template: "Resume.AI | %s",
   },
   description: "AI powered resume analyzer for job seekers",
   keywords: ["resume", "AI resume", "resume analyzer", "job"],
