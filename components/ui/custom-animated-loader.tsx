@@ -25,7 +25,7 @@ const LogoLoader = ({ text = "Loading...", className }: LogoLoaderProps) => {
         <div className="absolute inset-0 flex justify-center items-center">
           <div className="flex justify-center items-center bg-background shadow-sm p-1 border rounded-full w-12 h-12 overflow-hidden animate-pulse">
             <div className="flex justify-center items-center bg-primary rounded-lg w-9 h-9 group-hover:scale-110 transition-transform">
-              <span className="font-black text-white dark:text-black text-xl italic">R</span>
+              <span className="font-black text-white dark:text-black text-xl">R</span>
             </div>
           </div>
         </div>
