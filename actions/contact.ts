@@ -1,19 +1,17 @@
-import { NextResponse } from "next/server";
+"use server";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function POST(req: Request) {
+export async function Contact(name: string, email: string, message: string) {
   try {
-    const { name, email, message } = await req.json();
-
     // 1. Basic Validation
     if (!name || !email || !message) {
-      return NextResponse.json({ error: "All fields are required. " }, { status: 400 });
+      return { success: false, error: "All fields are required. " };
     }
 
     // 2. Email Logic
-    const data = await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: "Resume.ai <onboarding@resend.dev>",
       to: ["kunal.codes24@gmail.com"],
       subject: `New Contact Form Message from ${name}`,
@@ -34,11 +32,13 @@ export async function POST(req: Request) {
       `,
     });
 
-    return NextResponse.json(
-      { success: true, message: "Email sent successfully!", data },
-      { status: 200 }
-    );
+    if (error) {
+      console.error("Resend Error:", error);
+      return { success: false, error: "Failed to send email." };
+    }
+
+    return { success: true, message: "Email sent successfully!" };
   } catch (error) {
-    return NextResponse.json({ error: "Internal Server Error." }, { status: 500 });
+    return { success: false, error: "Internal Server Error." };
   }
 }

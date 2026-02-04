@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, Mail, MessageSquare, Globe, Loader2, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Mail, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import { Contact } from "@/actions/contact";
 
 const ContactUs = () => {
   const router = useRouter();
@@ -24,29 +25,26 @@ const ContactUs = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const formData = new FormData(e.currentTarget);
-    const payload = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      message: formData.get("message"),
-    };
-
+    const formRef = e.currentTarget;
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const formData = new FormData(e.currentTarget);
 
-      if (response.ok) {
+      const { name, email, message } = Object.fromEntries(formData.entries()) as Record<
+        string,
+        string
+      >;
+
+      const res = await Contact(name, email, message);
+
+      if (res?.success) {
         setIsSuccess(true);
-        (e.target as HTMLFormElement).reset();
+        formRef.reset();
+        toast.success("Message sent successfully!");
       } else {
-        const errorData = await response.json();
-        showFetchError(errorData.error || "Submission failed!");
+        showFetchError(res?.error || "Submission failed!");
       }
     } catch (error) {
-      showFetchError("Network error. Please try again!");
+      showFetchError("Something went wrong!");
     } finally {
       setIsSubmitting(false);
       setTimeout(() => setIsSuccess(false), 4000);
