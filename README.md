@@ -97,12 +97,6 @@ This project focuses on **real-world usability**, **clean frontend architecture*
 - AI API Integrations:
   - **Groq** — used for **fast responses and low-latency inference**
   - **Gemini** — used for **deep resume analysis and detailed insights**
-- ATS scoring logic & evaluation pipeline
-
-### Tools & Utilities
-
-- Server Actions
-- Environment-based configuration
 
 ---
 
