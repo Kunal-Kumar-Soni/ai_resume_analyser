@@ -1,26 +1,10 @@
 ## 📸 Screenshots
 
 <p align="center">
-  <img 
-    src="./screenshots/home.png" 
-    width="400" 
-    alt="History Page - Light Mode" 
-  />
-  <img 
-    src="./screenshots/fileshare.png" 
-    width="400" 
-    alt="History Page - Dark Mode" 
-  />
-  <img 
-    src="./screenshots/analysis.png" 
-    width="400" 
-    alt="History Page - Light Mode" 
-  />
-  <img 
-    src="./screenshots/history.png" 
-    width="400" 
-    alt="History Page - Dark Mode" 
-  />
+  <img src="public/screenshots/home.png" width="400" />
+  <img src="public/screenshots/fileshare.png" width="400" />
+  <img src="public/screenshots/analysis.png" width="400" />
+  <img src="public/screenshots/history.png" width="400" />
 </p>
 
 # Resume.ai
