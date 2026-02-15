@@ -32,6 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { supabaseClient } from "@/lib/supabaseClient";
+import { TbFileTextAi, TbFileTextSpark } from "react-icons/tb";
 
 const PDFUploadSleek = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -177,16 +178,15 @@ const PDFUploadSleek = () => {
         <nav className="flex justify-between items-center mb-12 pb-8 border-zinc-200 dark:border-zinc-800 border-b">
           <div className="flex items-center gap-4">
             <div className="group relative flex justify-center items-center bg-black dark:bg-white shadow-2xl rounded-xl w-10 h-10 overflow-hidden">
-              <GrTechnology className="z-10 relative w-6 h-6 text-white dark:text-black" />
+              <TbFileTextSpark className="z-10 relative w-6 h-6 text-white dark:text-black" />
               <div className="absolute inset-0 bg-linear-to-tr from-blue-500/20 via-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
             <div>
-              <h2 className="flex items-center gap-2 font-bold text-sm uppercase tracking-tight">
-                Aura
+              <h2 className="flex items-center gap-2 font-bold text-sm tracking-tight">
+                AI Powered
               </h2>
               <p className="flex items-center gap-1 font-black text-[9px] text-zinc-400 uppercase tracking-[0.3em]">
-                <span className="bg-green-500 rounded-full w-1 h-1 animate-pulse" />
-                Synthetic Mind
+                Neural Engine
               </p>
             </div>
           </div>
