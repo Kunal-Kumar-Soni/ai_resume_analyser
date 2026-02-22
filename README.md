@@ -118,7 +118,6 @@ This project focuses on **real-world usability**, **clean frontend architecture*
 
 ## Author
 
-Kunal Kumar Soni  
-Frontend Developer (React / Next.js)
+Kunal Kumar Soni
 
 This project is actively evolving, with ongoing improvements focused on performance, usability, and real hiring use cases.
