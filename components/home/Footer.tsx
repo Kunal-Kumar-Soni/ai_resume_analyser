@@ -29,7 +29,7 @@ const Footer = () => {
               </span>
             </div>
             <p className="max-w-xs text-muted-foreground text-sm md:text-left text-center">
-              Elevating careers with AI-powered resume intelligence.
+              Transforming resumes into powerful career opportunities with AI.
             </p>
           </div>
 
