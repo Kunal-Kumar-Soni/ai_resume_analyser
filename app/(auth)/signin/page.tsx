@@ -1,5 +1,6 @@
-import { SigninForm } from "@/components/signin-form";
 import { Metadata } from "next";
+
+import { SigninForm } from "@/components/signin-form";
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -7,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function SigninPage() {
   return (
-    <div className="flex flex-col justify-center items-center gap-6 min-h-svh">
-      <div className="flex flex-col gap-6 w-full max-w-lg">
+    <div className="flex min-h-svh flex-col items-center justify-center gap-6">
+      <div className="flex w-full max-w-lg flex-col gap-6">
         <SigninForm />
       </div>
     </div>

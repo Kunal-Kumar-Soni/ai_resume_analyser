@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
-import "./globals.css";
+
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/context/AuthProvider";
-import { ThemeProvider } from "@/components/theme-provider";
+
+import "./globals.css";
 
 const plusJakartaSans = Geist_Mono({
   variable: "--font-plus-jakarta-sans",
@@ -30,7 +32,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${plusJakartaSans.variable}   antialiased`} suppressHydrationWarning>
+      <body
+        className={`${plusJakartaSans.variable} antialiased`}
+        suppressHydrationWarning
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

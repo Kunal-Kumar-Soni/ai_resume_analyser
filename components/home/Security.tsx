@@ -1,5 +1,6 @@
+import { LuFingerprint, LuLock, LuShieldCheck } from "react-icons/lu";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LuShieldCheck, LuLock, LuFingerprint } from "react-icons/lu";
 
 const Security = () => {
   const steps = [
@@ -27,44 +28,45 @@ const Security = () => {
   ];
 
   return (
-    <section className="relative py-10 md:py-15 w-full overflow-hidden">
+    <section className="relative w-full overflow-hidden py-10 md:py-15">
       {/* Background decoration to match Hero */}
-      <div className="top-1/2 left-1/2 -z-10 absolute w-full h-full -translate-x-1/2 -translate-y-1/2">
-        <div className="top-0 right-0 absolute rounded-full w-[30%] h-[30%]" />
+      <div className="absolute top-1/2 left-1/2 -z-10 h-full w-full -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute top-0 right-0 h-[30%] w-[30%] rounded-full" />
       </div>
 
-      <div className="mx-auto p-6 max-w-7xl">
+      <div className="mx-auto max-w-7xl p-6">
         {/* Section Heading */}
         <div className="mb-16 text-center">
-          <h2 className="mb-4 font-plusJakartaSans font-black text-3xl md:text-5xl tracking-tighter">
+          <h2 className="font-plusJakartaSans mb-4 text-3xl font-black tracking-tighter md:text-5xl">
             Bank-Level <span className="text-primary">Security</span>
           </h2>
-          <p className="mx-auto max-w-2xl text-muted-foreground text-lg">
-            Your privacy is our priority. We use the latest technology to keep your data safe.
+          <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
+            Your privacy is our priority. We use the latest technology to keep
+            your data safe.
           </p>
         </div>
 
-        <div className="gap-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {steps.map((step) => (
             <Card
               key={step.id}
-              className="group relative bg-card/50 hover:bg-card hover:shadow-2xl hover:shadow-primary/10 backdrop-blur-sm border-border/50 rounded-[2rem] overflow-hidden transition-all hover:-translate-y-2 duration-300"
+              className="group bg-card/50 hover:bg-card hover:shadow-primary/10 border-border/50 relative overflow-hidden rounded-[2rem] backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
             >
-              <CardHeader className="z-10 relative">
+              <CardHeader className="relative z-10">
                 {/* Icon Container with Hero-like Glow */}
-                <div className="flex justify-center items-center bg-primary/10 group-hover:bg-primary mb-4 rounded-2xl w-14 h-14 text-primary group-hover:text-primary-foreground transition-colors duration-300">
+                <div className="bg-primary/10 group-hover:bg-primary text-primary group-hover:text-primary-foreground mb-4 flex h-14 w-14 items-center justify-center rounded-2xl transition-colors duration-300">
                   {step.icon}
                 </div>
-                <CardTitle className="font-plusJakartaSans font-bold text-foreground text-xl tracking-tight">
+                <CardTitle className="font-plusJakartaSans text-foreground text-xl font-bold tracking-tight">
                   {step.title}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="z-10 relative font- text-muted-foreground leading-relaxed">
+              <CardContent className="font- text-muted-foreground relative z-10 leading-relaxed">
                 {step.description}
               </CardContent>
 
               {/* Subtle bottom gradient line */}
-              <div className="bottom-0 absolute bg-linear-to-r from-transparent via-primary/20 to-transparent w-full h-0.5 scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+              <div className="via-primary/20 absolute bottom-0 h-0.5 w-full scale-x-0 bg-linear-to-r from-transparent to-transparent transition-transform duration-500 group-hover:scale-x-100" />
             </Card>
           ))}
         </div>

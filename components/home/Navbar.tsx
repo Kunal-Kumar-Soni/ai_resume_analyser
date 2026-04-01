@@ -1,20 +1,25 @@
 "use client";
-import { Button } from "../ui/button";
+import { useState } from "react";
+
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+
+import { LogOut } from "lucide-react";
+import { toast } from "sonner";
+
 import { useAuth } from "@/hooks/useAuth";
 import { supabaseClient } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+
 import { AnimatedThemeToggler } from "../ui/animated-theme-toggler";
-import { LogOut } from "lucide-react";
-import { useState } from "react";
-import Image from "next/image";
+import { Button } from "../ui/button";
 import UserProfile from "./UserProfile";
 
 const Navbar = () => {
   const { user, isLoading } = useAuth();
   const router = useRouter();
   const [imgError, setImgError] = useState(false);
-  const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
+  const avatarUrl =
+    user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
 
   const handleSignIn = () => {
     router.replace("/signin");
@@ -40,17 +45,19 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="top-0 z-50 sticky bg-background/80 backdrop-blur-xl border-border/40 border-b w-full">
-      <div className="flex justify-between items-center mx-auto p-6 max-w-7xl h-20">
+    <nav className="bg-background/80 border-border/40 sticky top-0 z-50 w-full border-b backdrop-blur-xl">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between p-6">
         {/* Left: Logo (Footer se match kiya gaya) */}
         <div
-          className="group flex items-center gap-2 cursor-pointer"
+          className="group flex cursor-pointer items-center gap-2"
           onClick={() => router.replace("/")}
         >
-          <div className="flex justify-center items-center bg-primary rounded-lg w-9 h-9 group-hover:scale-110 transition-transform">
-            <span className="font-black text-white dark:text-black text-xl">R</span>
+          <div className="bg-primary flex h-9 w-9 items-center justify-center rounded-lg transition-transform group-hover:scale-110">
+            <span className="text-xl font-black text-white dark:text-black">
+              R
+            </span>
           </div>
-          <span className="font-black text-2xl italic tracking-tighter">
+          <span className="text-2xl font-black tracking-tighter italic">
             Resume<span className="text-primary not-italic">.AI</span>
           </span>
         </div>
@@ -60,7 +67,7 @@ const Navbar = () => {
           <div className="flex items-center gap-3">
             <AnimatedThemeToggler duration={600} />
 
-            <div className="block bg-muted-foreground/30 dark:bg-muted-foreground/50 mx-1 sm:mx-2 w-px h-6" />
+            <div className="bg-muted-foreground/30 dark:bg-muted-foreground/50 mx-1 block h-6 w-px sm:mx-2" />
 
             {user && !isLoading ? (
               <UserProfile />
@@ -68,7 +75,7 @@ const Navbar = () => {
               <Button
                 title="sign in"
                 onClick={handleSignIn}
-                className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 px-6 rounded-xl font-bold text-white dark:text-black active:scale-95 transition-all"
+                className="bg-primary hover:bg-primary/90 shadow-primary/20 rounded-xl px-6 font-bold text-white shadow-lg transition-all active:scale-95 dark:text-black"
               >
                 Sign In
               </Button>

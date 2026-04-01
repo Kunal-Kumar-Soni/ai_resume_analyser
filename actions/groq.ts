@@ -4,7 +4,10 @@ import Groq from "groq-sdk";
 // The client gets the API key from the environment variable `GROQ_API_KEY`.
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-export async function generateAiResumeFromGroq(resumeText: string, jobDescription: string) {
+export async function generateAiResumeFromGroq(
+  resumeText: string,
+  jobDescription: string,
+) {
   const isMatchingTask = jobDescription && jobDescription.trim().length > 0;
 
   // Dynamic Prompt
@@ -54,7 +57,10 @@ export async function generateAiResumeFromGroq(resumeText: string, jobDescriptio
       temperature: 0.5,
     });
 
-    return { success: true, output: response.choices[0]?.message?.content || "" };
+    return {
+      success: true,
+      output: response.choices[0]?.message?.content || "",
+    };
   } catch (error: any) {
     console.error("Groq Error:", error);
     return { success: false, error: "Groq is currently busy!" };

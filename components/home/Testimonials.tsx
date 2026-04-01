@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+
 import { Marquee } from "../ui/marquee";
 
 const reviews = [
@@ -49,19 +50,21 @@ const ReviewCard = ({
   return (
     <figure
       className={cn(
-        "relative p-4 border rounded-xl w-64 h-full overflow-hidden cursor-pointer",
+        "relative h-full w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
         // light styles
-        "border-gray-950/10 bg-card/10 hover:bg-gray-950/5",
+        "bg-card/10 border-gray-950/10 hover:bg-gray-950/5",
         // dark styles
-        "dark:border-gray-50/10 dark:bg-card/70 dark:hover:bg-gray-50/8"
+        "dark:bg-card/70 dark:border-gray-50/10 dark:hover:bg-gray-50/8",
       )}
     >
       <blockquote className="mb-6 text-sm">"{body}"</blockquote>
       <div className="flex flex-row items-center gap-2">
         <img className="rounded-full" width="32" height="32" alt="" src={img} />
         <div className="flex flex-col">
-          <figcaption className="font-medium dark:text-white text-sm">{name}</figcaption>
-          <p className="font-medium dark:text-white/40 text-xs">{username}</p>
+          <figcaption className="text-sm font-medium dark:text-white">
+            {name}
+          </figcaption>
+          <p className="text-xs font-medium dark:text-white/40">{username}</p>
         </div>
       </div>
     </figure>
@@ -70,8 +73,8 @@ const ReviewCard = ({
 
 export default function Testimonials() {
   return (
-    <div className="relative flex flex-col justify-center items-center mx-auto my-10 max-w-7xl overflow-hidden">
-      <h2 className="mb-15 font-plusJakartaSans font-black text-3xl md:text-5xl tracking-tighter">
+    <div className="relative mx-auto my-10 flex max-w-7xl flex-col items-center justify-center overflow-hidden">
+      <h2 className="font-plusJakartaSans mb-15 text-3xl font-black tracking-tighter md:text-5xl">
         What Our User <span className="text-primary">Say</span>
       </h2>
       <Marquee pauseOnHover className="[--duration:30s]">
@@ -79,8 +82,8 @@ export default function Testimonials() {
           <ReviewCard key={review.username} {...review} />
         ))}
       </Marquee>
-      <div className="left-0 absolute inset-y-0 bg-linear-to-r from-background w-1/4 pointer-events-none"></div>
-      <div className="right-0 absolute inset-y-0 bg-linear-to-l from-background w-1/4 pointer-events-none"></div>
+      <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-linear-to-r"></div>
+      <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-linear-to-l"></div>
     </div>
   );
 }

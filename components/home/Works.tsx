@@ -1,6 +1,7 @@
-import { TbChartPie } from "react-icons/tb";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LuSettings, LuUpload } from "react-icons/lu";
+import { TbChartPie } from "react-icons/tb";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Works = () => {
   const steps = [
@@ -28,51 +29,51 @@ const Works = () => {
   ];
 
   return (
-    <section className="relative py-10 md:py-15 w-full overflow-hidden">
+    <section className="relative w-full overflow-hidden py-10 md:py-15">
       {/* Background decoration - matching Hero/Security */}
-      <div className="top-0 right-1/4 -z-10 absolute rounded-full w-96 h-96" />
+      <div className="absolute top-0 right-1/4 -z-10 h-96 w-96 rounded-full" />
 
-      <div className="mx-auto px-6 max-w-7xl">
+      <div className="mx-auto max-w-7xl px-6">
         <div className="mb-16 text-center">
-          <h2 className="mb-4 font-plusJakartaSans font-black text-3xl md:text-5xl tracking-tighter">
+          <h2 className="font-plusJakartaSans mb-4 text-3xl font-black tracking-tighter md:text-5xl">
             How It <span className="text-primary">Works</span>
           </h2>
-          <p className="mx-auto max-w-2xl font-medium text-muted-foreground text-lg">
+          <p className="text-muted-foreground mx-auto max-w-2xl text-lg font-medium">
             Three simple steps to make your resume stand out from the crowd.
           </p>
         </div>
 
-        <div className="relative gap-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="relative grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {/* Subtle connecting line for Desktop */}
-          <div className="hidden lg:block top-1/2 left-0 absolute bg-linear-to-r from-primary/20 via-primary/40 to-primary/20 w-full h-px -translate-y-1/2" />
+          <div className="from-primary/20 via-primary/40 to-primary/20 absolute top-1/2 left-0 hidden h-px w-full -translate-y-1/2 bg-linear-to-r lg:block" />
 
           {steps.map((step) => (
             <Card
               key={step.id}
-              className="group relative bg-card/50 hover:bg-card hover:shadow-2xl hover:shadow-primary/10 backdrop-blur-xl border-border/50 rounded-[2.5rem] overflow-hidden transition-all hover:-translate-y-2 duration-500"
+              className="group bg-card/50 hover:bg-card hover:shadow-primary/10 border-border/50 relative overflow-hidden rounded-[2.5rem] backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
             >
-              <CardHeader className="z-10 relative">
+              <CardHeader className="relative z-10">
                 {/* Step Number Badge */}
-                <div className="right-8 absolute font-black text-primary/5 group-hover:text-primary/10 text-6xl transition-colors pointer-events-none">
+                <div className="text-primary/5 group-hover:text-primary/10 pointer-events-none absolute right-8 text-6xl font-black transition-colors">
                   0{step.id}
                 </div>
 
                 {/* Icon Container with Glow */}
-                <div className="flex justify-center items-center bg-primary/10 group-hover:bg-primary shadow-lg shadow-primary/5 mb-6 rounded-2xl w-14 h-14 text-primary group-hover:text-primary-foreground transition-all duration-300">
+                <div className="bg-primary/10 group-hover:bg-primary shadow-primary/5 text-primary group-hover:text-primary-foreground mb-6 flex h-14 w-14 items-center justify-center rounded-2xl shadow-lg transition-all duration-300">
                   {step.icon}
                 </div>
 
-                <CardTitle className="font-plusJakartaSans font-bold text-foreground text-xl tracking-tight">
+                <CardTitle className="font-plusJakartaSans text-foreground text-xl font-bold tracking-tight">
                   {step.title}
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="z-10 relative pb-10 text-md text-muted-foreground leading-relaxed">
+              <CardContent className="text-md text-muted-foreground relative z-10 pb-10 leading-relaxed">
                 {step.description}
               </CardContent>
 
               {/* Decorative accent for active step feel */}
-              <div className="bottom-0 left-0 absolute bg-primary opacity-0 group-hover:opacity-100 w-full h-1 transition-opacity duration-300" />
+              <div className="bg-primary absolute bottom-0 left-0 h-1 w-full opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             </Card>
           ))}
         </div>

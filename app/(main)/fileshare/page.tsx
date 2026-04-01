@@ -1,29 +1,30 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { GrTechnology } from "react-icons/gr";
+import { TbFileTextAi, TbFileTextSpark } from "react-icons/tb";
+
+import { useRouter } from "next/navigation";
+
 import {
-  Upload,
-  FileText,
-  ShieldCheck,
-  Sparkles,
+  ArrowLeft,
   ArrowRight,
   FileCheck2,
-  X,
+  FileText,
   History,
-  ArrowLeft,
+  ShieldCheck,
+  Sparkles,
+  Upload,
+  X,
   Zap,
 } from "lucide-react";
-import { GrTechnology } from "react-icons/gr";
-import { getPDFText } from "@/lib/getPDFText";
-import PageLoader from "@/components/ui/custom-animated-loader";
-import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
-import { generateAiResumeFromGemini } from "@/actions/gemini";
-import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
+
+import { generateAiResumeFromGemini } from "@/actions/gemini";
 import { generateAiResumeFromGroq } from "@/actions/groq";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import PageLoader from "@/components/ui/custom-animated-loader";
 import {
   Select,
   SelectContent,
@@ -31,8 +32,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
+import { useAuth } from "@/hooks/useAuth";
+import { getPDFText } from "@/lib/getPDFText";
 import { supabaseClient } from "@/lib/supabaseClient";
-import { TbFileTextAi, TbFileTextSpark } from "react-icons/tb";
 
 const PDFUploadSleek = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -163,29 +166,29 @@ const PDFUploadSleek = () => {
   }
 
   return (
-    <div className="selection:bg-zinc-200 dark:selection:bg-zinc-800 mx-auto max-w-7xl min-h-screen text-zinc-900 dark:text-zinc-100 transition-colors duration-500">
-      <div className="z-10 relative space-y-12 mx-auto p-6 max-w-350">
+    <div className="mx-auto min-h-screen max-w-7xl text-zinc-900 transition-colors duration-500 selection:bg-zinc-200 dark:text-zinc-100 dark:selection:bg-zinc-800">
+      <div className="relative z-10 mx-auto max-w-350 space-y-12 p-6">
         <div className="mb-6">
           <button
             onClick={() => router.replace("/")}
-            className="group flex items-center gap-2 font-bold text-[10px] text-zinc-400 hover:text-black dark:hover:text-white uppercase tracking-[0.2em] transition-all"
+            className="group flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] text-zinc-400 uppercase transition-all hover:text-black dark:hover:text-white"
           >
-            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
             Back to Home
           </button>
         </div>
 
-        <nav className="flex justify-between items-center mb-12 pb-8 border-zinc-200 dark:border-zinc-800 border-b">
+        <nav className="mb-12 flex items-center justify-between border-b border-zinc-200 pb-8 dark:border-zinc-800">
           <div className="flex items-center gap-4">
-            <div className="group relative flex justify-center items-center bg-black dark:bg-white shadow-2xl rounded-xl w-10 h-10 overflow-hidden">
-              <TbFileTextSpark className="z-10 relative w-6 h-6 text-white dark:text-black" />
-              <div className="absolute inset-0 bg-linear-to-tr from-blue-500/20 via-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="group relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-black shadow-2xl dark:bg-white">
+              <TbFileTextSpark className="relative z-10 h-6 w-6 text-white dark:text-black" />
+              <div className="absolute inset-0 bg-linear-to-tr from-blue-500/20 via-purple-500/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
             </div>
             <div>
-              <h2 className="flex items-center gap-2 font-bold text-sm tracking-tight">
+              <h2 className="flex items-center gap-2 text-sm font-bold tracking-tight">
                 AI Powered
               </h2>
-              <p className="flex items-center gap-1 font-black text-[9px] text-zinc-400 uppercase tracking-[0.3em]">
+              <p className="flex items-center gap-1 text-[9px] font-black tracking-[0.3em] text-zinc-400 uppercase">
                 Neural Engine
               </p>
             </div>
@@ -194,78 +197,87 @@ const PDFUploadSleek = () => {
             <Button
               onClick={() => router.push("/fileshare/history")}
               variant="outline"
-              className="hover:bg-zinc-50 dark:hover:bg-zinc-900 px-6 py-5 border-zinc-200 dark:border-zinc-800 rounded-full font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all"
+              className="rounded-full border-zinc-200 px-6 py-5 text-[10px] font-black tracking-widest uppercase transition-all hover:bg-zinc-50 active:scale-95 dark:border-zinc-800 dark:hover:bg-zinc-900"
             >
-              <History className="mr-2 w-3.5 h-3.5" />
+              <History className="mr-2 h-3.5 w-3.5" />
               History
             </Button>
           </div>
         </nav>
 
-        <div className="items-start gap-12 grid grid-cols-1 lg:grid-cols-12">
+        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
           <div className="space-y-8 lg:col-span-7">
             <header className="space-y-2">
-              <h1 className="font-black text-5xl lg:text-6xl tracking-tighter">
-                Extract <span className="text-zinc-400 dark:text-zinc-700">Reality.</span>
+              <h1 className="text-5xl font-black tracking-tighter lg:text-6xl">
+                Extract{" "}
+                <span className="text-zinc-400 dark:text-zinc-700">
+                  Reality.
+                </span>
               </h1>
-              <p className="max-w-xl font-medium text-zinc-500 dark:text-zinc-400 text-lg leading-relaxed">
-                Our high-fidelity parser deconstructs complex PDFs into structured data in
-                milliseconds.
+              <p className="max-w-xl text-lg leading-relaxed font-medium text-zinc-500 dark:text-zinc-400">
+                Our high-fidelity parser deconstructs complex PDFs into
+                structured data in milliseconds.
               </p>
             </header>
 
             {!file ? (
               <div className="group relative mt-8">
                 <div
-                  className={`absolute inset-0 bg-zinc-100 dark:bg-zinc-900 rounded-[2.5rem] transition-transform duration-500 ${
-                    isDragging ? "scale-100" : "scale-[0.98] group-hover:scale-100"
+                  className={`absolute inset-0 rounded-[2.5rem] bg-zinc-100 transition-transform duration-500 dark:bg-zinc-900 ${
+                    isDragging
+                      ? "scale-100"
+                      : "scale-[0.98] group-hover:scale-100"
                   }`}
                 ></div>
                 <Card
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
-                  className={`relative bg-white dark:bg-[#0a0a0a] shadow-sm border rounded-[2.5rem] overflow-hidden transition-all duration-500 ${
+                  className={`relative overflow-hidden rounded-[2.5rem] border bg-white shadow-sm transition-all duration-500 dark:bg-[#0a0a0a] ${
                     isDragging
-                      ? "border-black dark:border-white scale-[1.01]"
-                      : "border-zinc-200 dark:border-zinc-800 dark:group-hover:border-zinc-600 group-hover:border-zinc-400"
+                      ? "scale-[1.01] border-black dark:border-white"
+                      : "border-zinc-200 group-hover:border-zinc-400 dark:border-zinc-800 dark:group-hover:border-zinc-600"
                   }`}
                 >
                   <CardContent className="p-0">
-                    <label className="flex flex-col justify-center items-center w-full min-h-112.5 cursor-pointer">
+                    <label className="flex min-h-112.5 w-full cursor-pointer flex-col items-center justify-center">
                       <div className="space-y-6 text-center">
                         <div
-                          className={`flex justify-center items-center shadow-inner mx-auto border rounded-3xl w-20 h-20 transition-all duration-500 ${
+                          className={`mx-auto flex h-20 w-20 items-center justify-center rounded-3xl border shadow-inner transition-all duration-500 ${
                             isDragging
-                              ? "bg-black dark:bg-white text-white dark:text-black scale-110"
-                              : "bg-zinc-50 dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 group-hover:rotate-6"
+                              ? "scale-110 bg-black text-white dark:bg-white dark:text-black"
+                              : "border-zinc-100 bg-zinc-50 group-hover:rotate-6 dark:border-zinc-800 dark:bg-zinc-900"
                           }`}
                         >
                           <Upload
-                            className={`w-8 h-8 ${isDragging ? "text-current" : "text-zinc-400"}`}
+                            className={`h-8 w-8 ${isDragging ? "text-current" : "text-zinc-400"}`}
                           />
                         </div>
                         <div className="space-y-2">
-                          <h3 className="font-bold text-xl">
-                            {isDragging ? "Drop to Upload" : "Select PDF Document"}
+                          <h3 className="text-xl font-bold">
+                            {isDragging
+                              ? "Drop to Upload"
+                              : "Select PDF Document"}
                           </h3>
-                          <p className="font-medium text-zinc-500 text-sm">
-                            {isDragging ? "Release your file now" : "Drag & drop or"}{" "}
+                          <p className="text-sm font-medium text-zinc-500">
+                            {isDragging
+                              ? "Release your file now"
+                              : "Drag & drop or"}{" "}
                             {!isDragging && (
-                              <span className="text-black dark:text-white underline">
+                              <span className="text-black underline dark:text-white">
                                 browse system
                               </span>
                             )}
                           </p>
                         </div>
-                        <div className="flex justify-center items-center gap-6 pt-4">
-                          <div className="flex items-center gap-2 pr-6 border-zinc-200 dark:border-zinc-800 border-r font-bold text-[10px] text-zinc-400 uppercase tracking-widest">
-                            <ShieldCheck className="w-3.5 h-3.5 text-zinc-900 dark:text-white" />{" "}
+                        <div className="flex items-center justify-center gap-6 pt-4">
+                          <div className="flex items-center gap-2 border-r border-zinc-200 pr-6 text-[10px] font-bold tracking-widest text-zinc-400 uppercase dark:border-zinc-800">
+                            <ShieldCheck className="h-3.5 w-3.5 text-zinc-900 dark:text-white" />{" "}
                             ISO SECURE
                           </div>
-                          <div className="flex items-center gap-2 font-bold text-[10px] text-zinc-400 uppercase tracking-widest">
-                            <FileCheck2 className="w-3.5 h-3.5 text-zinc-900 dark:text-white" /> RAW
-                            TEXT
+                          <div className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-zinc-400 uppercase">
+                            <FileCheck2 className="h-3.5 w-3.5 text-zinc-900 dark:text-white" />{" "}
+                            RAW TEXT
                           </div>
                         </div>
                       </div>
@@ -280,20 +292,20 @@ const PDFUploadSleek = () => {
                 </Card>
               </div>
             ) : (
-              <div className="slide-in-from-bottom-4 animate-in duration-500 fade-in">
-                <Card className="flex justify-between items-center bg-white dark:bg-[#0a0a0a] shadow-2xl p-8 border-2 border-black dark:border-white rounded-[2.5rem]">
+              <div className="slide-in-from-bottom-4 animate-in fade-in duration-500">
+                <Card className="flex items-center justify-between rounded-[2.5rem] border-2 border-black bg-white p-8 shadow-2xl dark:border-white dark:bg-[#0a0a0a]">
                   <div className="flex items-center gap-6">
-                    <div className="flex justify-center items-center bg-zinc-100 dark:bg-zinc-900 rounded-2xl w-16 h-16">
-                      <FileText className="w-8 h-8" />
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-900">
+                      <FileText className="h-8 w-8" />
                     </div>
                     <div>
-                      <p className="mb-1 font-black text-zinc-400 text-xs uppercase tracking-[0.2em]">
+                      <p className="mb-1 text-xs font-black tracking-[0.2em] text-zinc-400 uppercase">
                         Source File
                       </p>
-                      <h4 className="font-bold text-xl">
+                      <h4 className="text-xl font-bold">
                         {isParsing ? (
-                          <div className="flex justify-center items-center gap-2 text-zinc-400">
-                            <Spinner className="mt-2 w-8 h-8" />
+                          <div className="flex items-center justify-center gap-2 text-zinc-400">
+                            <Spinner className="mt-2 h-8 w-8" />
                           </div>
                         ) : (
                           <>{finalTitle}</>
@@ -304,9 +316,9 @@ const PDFUploadSleek = () => {
                   <Button
                     onClick={handleRemoveFile}
                     variant="outline"
-                    className="hover:bg-red-50 dark:hover:bg-red-900/10 p-0 border-zinc-200 dark:border-zinc-800 rounded-full w-12 h-12 hover:text-red-500 transition-colors"
+                    className="h-12 w-12 rounded-full border-zinc-200 p-0 transition-colors hover:bg-red-50 hover:text-red-500 dark:border-zinc-800 dark:hover:bg-red-900/10"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="h-5 w-5" />
                   </Button>
                 </Card>
               </div>
@@ -314,48 +326,64 @@ const PDFUploadSleek = () => {
           </div>
 
           <div className="space-y-6 lg:col-span-5">
-            <Card className="space-y-3 bg-white dark:bg-[#0a0a0a] shadow-xl p-8 border border-zinc-200 dark:border-zinc-800 rounded-[2.5rem]">
-              <div className="flex justify-between items-center">
-                <h4 className="font-black text-md uppercase tracking-widest">Configuration</h4>
-                <Sparkles className="w-4 h-4 text-zinc-400" />
+            <Card className="space-y-3 rounded-[2.5rem] border border-zinc-200 bg-white p-8 shadow-xl dark:border-zinc-800 dark:bg-[#0a0a0a]">
+              <div className="flex items-center justify-between">
+                <h4 className="text-md font-black tracking-widest uppercase">
+                  Configuration
+                </h4>
+                <Sparkles className="h-4 w-4 text-zinc-400" />
               </div>
 
               {/* ENGINE SELECTOR - MINIMALIST PREMIUM */}
               <div className="space-y-2">
-                <label className="font-black text-[12px] text-zinc-400 uppercase tracking-widest">
+                <label className="text-[12px] font-black tracking-widest text-zinc-400 uppercase">
                   AI Engine
                 </label>
 
                 <Select value={selectedModel} onValueChange={setSelectedModel}>
-                  <SelectTrigger className="bg-zinc-50 dark:bg-zinc-900/50 mt-2 px-6 py-8 border-none rounded-2xl focus:ring-0 w-full h-14">
+                  <SelectTrigger className="mt-2 h-14 w-full rounded-2xl border-none bg-zinc-50 px-6 py-8 focus:ring-0 dark:bg-zinc-900/50">
                     <div className="flex items-center gap-3 text-left">
                       <SelectValue />
                     </div>
                   </SelectTrigger>
 
-                  <SelectContent className="bg-white dark:bg-zinc-950 shadow-2xl border-zinc-200 dark:border-zinc-800 rounded-2xl">
-                    <SelectItem value="gemini" className="py-4 rounded-xl cursor-pointer">
+                  <SelectContent className="rounded-2xl border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-950">
+                    <SelectItem
+                      value="gemini"
+                      className="cursor-pointer rounded-xl py-4"
+                    >
                       <div className="flex items-center gap-3">
-                        <div className="flex justify-center items-center w-6 h-6">
+                        <div className="flex h-6 w-6 items-center justify-center">
                           <Sparkles size={14} />
                         </div>
 
                         <div className="flex flex-col">
-                          <span className="mb-1 font-bold uppercase leading-tight">Gemini</span>
-                          <span className="opacity-50 text-xs leading-tight">Deep Analysis</span>
+                          <span className="mb-1 leading-tight font-bold uppercase">
+                            Gemini
+                          </span>
+                          <span className="text-xs leading-tight opacity-50">
+                            Deep Analysis
+                          </span>
                         </div>
                       </div>
                     </SelectItem>
 
-                    <SelectItem value="groq" className="py-4 rounded-xl cursor-pointer">
+                    <SelectItem
+                      value="groq"
+                      className="cursor-pointer rounded-xl py-4"
+                    >
                       <div className="flex items-center gap-3">
-                        <div className="flex justify-center items-center w-6 h-6">
+                        <div className="flex h-6 w-6 items-center justify-center">
                           <Zap size={14} />
                         </div>
 
                         <div className="flex flex-col">
-                          <span className="mb-1 font-bold uppercase leading-tight">Groq LPU</span>
-                          <span className="opacity-50 text-xs leading-tight">Instant Speed</span>
+                          <span className="mb-1 leading-tight font-bold uppercase">
+                            Groq LPU
+                          </span>
+                          <span className="text-xs leading-tight opacity-50">
+                            Instant Speed
+                          </span>
                         </div>
                       </div>
                     </SelectItem>
@@ -365,15 +393,15 @@ const PDFUploadSleek = () => {
 
               {/* job content section */}
               <div className="space-y-4">
-                <div className="flex justify-between items-center px-1">
-                  <label className="font-black text-[12px] text-zinc-400 uppercase tracking-widest">
+                <div className="flex items-center justify-between px-1">
+                  <label className="text-[12px] font-black tracking-widest text-zinc-400 uppercase">
                     Job Context
                   </label>
                 </div>
                 <textarea
                   placeholder="Paste Job Description here..."
                   value={jobDescription}
-                  className="bg-zinc-50 dark:bg-[#050505] p-6 border border-zinc-200 dark:border-zinc-800 rounded-[2rem] outline-none focus:ring-1 focus:ring-black dark:focus:ring-white w-full h-72 font-medium text-sm transition-all resize-none"
+                  className="h-72 w-full resize-none rounded-[2rem] border border-zinc-200 bg-zinc-50 p-6 text-sm font-medium transition-all outline-none focus:ring-1 focus:ring-black dark:border-zinc-800 dark:bg-[#050505] dark:focus:ring-white"
                   onChange={(e) => setJobDescription(e.target.value)}
                 />
               </div>
@@ -381,16 +409,16 @@ const PDFUploadSleek = () => {
               <Button
                 onClick={handleExecuteAnalysis}
                 disabled={!file || isParsing}
-                className="bg-black dark:bg-white hover:opacity-90 disabled:opacity-20 shadow-xl rounded-[1.8rem] w-full h-16 font-black text-white dark:text-black text-xs uppercase tracking-[0.3em] active:scale-[0.97] transition-all"
+                className="h-16 w-full rounded-[1.8rem] bg-black text-xs font-black tracking-[0.3em] text-white uppercase shadow-xl transition-all hover:opacity-90 active:scale-[0.97] disabled:opacity-20 dark:bg-white dark:text-black"
               >
                 Execute Analysis
-                <ArrowRight className="ml-2 w-4 h-4" />
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Card>
 
-            <div className="flex items-center gap-2.5 bg-zinc-50/50 dark:bg-zinc-900/30 px-4 py-3 border border-zinc-100 dark:border-zinc-800 rounded-xl">
-              <ShieldCheck className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
-              <p className="font-normal text-[13px] text-zinc-500 dark:text-zinc-400 tracking-tight">
+            <div className="flex items-center gap-2.5 rounded-xl border border-zinc-100 bg-zinc-50/50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900/30">
+              <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+              <p className="text-[13px] font-normal tracking-tight text-zinc-500 dark:text-zinc-400">
                 AI-powered matching. Secure processing. No data retention.
               </p>
             </div>

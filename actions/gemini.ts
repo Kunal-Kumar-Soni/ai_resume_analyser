@@ -5,7 +5,10 @@ import { GoogleGenAI } from "@google/genai";
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY as string });
 
-export async function generateAiResumeFromGemini(resumeText: string, jobDescription: string) {
+export async function generateAiResumeFromGemini(
+  resumeText: string,
+  jobDescription: string,
+) {
   const isMatchingTask = jobDescription && jobDescription.trim().length > 0;
 
   // Dynamic Prompt

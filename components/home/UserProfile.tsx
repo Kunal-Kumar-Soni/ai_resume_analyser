@@ -1,18 +1,26 @@
 "use client";
 
 import { useState } from "react";
+
 import Image from "next/image";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useAuth } from "@/hooks/useAuth";
+
 import { LogOut } from "lucide-react";
-import { supabaseClient } from "@/lib/supabaseClient";
 import { toast } from "sonner";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useAuth } from "@/hooks/useAuth";
+import { supabaseClient } from "@/lib/supabaseClient";
 
 export default function UserProfile() {
   const { user } = useAuth();
   const [imgError, setImgError] = useState(false);
 
-  const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
+  const avatarUrl =
+    user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
 
   const isSocialLogin = user?.app_metadata?.provider !== "email";
   const isVerified = user?.email_confirmed_at && isSocialLogin;
@@ -41,7 +49,7 @@ export default function UserProfile() {
       <PopoverTrigger asChild>
         <button
           key={user?.id}
-          className="relative flex justify-center items-center bg-white/90 hover:bg-gray-50 dark:bg-white/10 dark:hover:bg-white/20 shadow-sm border border-gray-200 dark:border-white/10 rounded-full focus:ring-2 focus:ring-primary/20 w-10 h-10 overflow-hidden transition-all cursor-pointer shrink-0"
+          className="focus:ring-primary/20 relative flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-gray-200 bg-white/90 shadow-sm transition-all hover:bg-gray-50 focus:ring-2 dark:border-white/10 dark:bg-white/10 dark:hover:bg-white/20"
         >
           {avatarUrl && !imgError ? (
             <Image
@@ -54,44 +62,44 @@ export default function UserProfile() {
               onError={() => setImgError(true)}
             />
           ) : (
-            <span className="font-bold text-primary text-sm">
+            <span className="text-primary text-sm font-bold">
               {user?.email?.[0]?.toUpperCase() || "U"}
             </span>
           )}
         </button>
       </PopoverTrigger>
 
-      <PopoverContent className="p-2 w-64" align="end" sideOffset={8}>
+      <PopoverContent className="w-64 p-2" align="end" sideOffset={8}>
         {/* User Info Section */}
         <div className="px-3 py-2.5">
-          <div className="flex justify-between items-center">
-            <p className="font-medium text-muted-foreground text-xs">Account</p>
+          <div className="flex items-center justify-between">
+            <p className="text-muted-foreground text-xs font-medium">Account</p>
 
             {/* Email Verification Badge */}
             {isVerified ? (
-              <span className="flex items-center gap-1 bg-emerald-50 dark:bg-emerald-500/10 px-1.5 py-0.5 border border-emerald-100 dark:border-emerald-500/20 rounded-full font-medium text-[10px] text-emerald-600 dark:text-emerald-400">
-                <span className="bg-emerald-500 rounded-full w-1 h-1 animate-pulse" />
+              <span className="flex items-center gap-1 rounded-full border border-emerald-100 bg-emerald-50 px-1.5 py-0.5 text-[10px] font-medium text-emerald-600 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400">
+                <span className="h-1 w-1 animate-pulse rounded-full bg-emerald-500" />
                 Verified
               </span>
             ) : (
-              <span className="bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 border border-amber-100 dark:border-amber-500/20 rounded-full font-medium text-[10px] text-amber-600 dark:text-amber-400">
+              <span className="rounded-full border border-amber-100 bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium text-amber-600 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-400">
                 Unverified
               </span>
             )}
           </div>
-          <p className="mt-1 font-medium text-zinc-900 dark:text-zinc-100 text-sm truncate">
+          <p className="mt-1 truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
             {user?.email}
           </p>
         </div>
-        <div className="bg-zinc-100 dark:bg-zinc-800 my-1 h-px" />
+        <div className="my-1 h-px bg-zinc-100 dark:bg-zinc-800" />
 
         {/* Logout Button */}
         <button
           onClick={handleSignout}
-          className="group flex items-center gap-2.5 hover:bg-zinc-100 dark:hover:bg-white/10 px-3 py-2 rounded-md w-full font-medium text-zinc-600 hover:text-zinc-900 dark:hover:text-zinc-50 dark:text-zinc-400 text-sm transition-all cursor-pointer"
+          className="group flex w-full cursor-pointer items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium text-zinc-600 transition-all hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-zinc-50"
         >
-          <div className="flex justify-center items-center bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 dark:group-hover:border-zinc-700 group-hover:border-zinc-300 rounded-md w-7 h-7 transition-all">
-            <LogOut className="opacity-70 group-hover:opacity-100 w-3.5 h-3.5 transition-all group-hover:translate-x-0.5" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-md border border-zinc-200 bg-zinc-50 transition-all group-hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:group-hover:border-zinc-700">
+            <LogOut className="h-3.5 w-3.5 opacity-70 transition-all group-hover:translate-x-0.5 group-hover:opacity-100" />
           </div>
           <span>Sign out</span>
         </button>

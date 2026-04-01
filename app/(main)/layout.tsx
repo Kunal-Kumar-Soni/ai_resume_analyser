@@ -14,7 +14,7 @@ export default function RootLayout({
   if (isLoading) return <PageLoader />;
 
   return (
-    <div className="animate-in duration-700 fade-in">
+    <div className="animate-in fade-in duration-700">
       <Navbar />
       {children}
       <Footer />

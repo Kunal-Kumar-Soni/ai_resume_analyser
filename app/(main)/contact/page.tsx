@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, Mail, CheckCircle2 } from "lucide-react";
+
 import { useRouter } from "next/navigation";
+
+import { ArrowLeft, CheckCircle2, Mail } from "lucide-react";
 import { toast } from "sonner";
-import { Spinner } from "@/components/ui/spinner";
+
 import { Contact } from "@/actions/contact";
+import { Spinner } from "@/components/ui/spinner";
 
 const ContactUs = () => {
   const router = useRouter();
@@ -29,10 +32,9 @@ const ContactUs = () => {
     try {
       const formData = new FormData(e.currentTarget);
 
-      const { name, email, message } = Object.fromEntries(formData.entries()) as Record<
-        string,
-        string
-      >;
+      const { name, email, message } = Object.fromEntries(
+        formData.entries(),
+      ) as Record<string, string>;
 
       const res = await Contact(name, email, message);
 
@@ -52,40 +54,42 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="m-4 mx-auto max-w-7xl text-foreground">
-      <div className="shadow-sm m-6 p-6 border border-border rounded-xl">
+    <div className="text-foreground m-4 mx-auto max-w-7xl">
+      <div className="border-border m-6 rounded-xl border p-6 shadow-sm">
         {/* Navigation */}
         <div className="mb-6">
           <button
             onClick={() => router.back()}
-            className="group flex items-center gap-2 font-bold text-[10px] text-zinc-400 hover:text-black dark:hover:text-white uppercase tracking-[0.2em] transition-all"
+            className="group flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] text-zinc-400 uppercase transition-all hover:text-black dark:hover:text-white"
           >
-            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
             Back
           </button>
         </div>
 
         {/* Header */}
-        <header className="mb-10 pb-6 border-border border-b">
-          <h1 className="font-bold text-3xl tracking-tight">Contact Us</h1>
-          <p className="opacity-60 mt-2 text-sm">We're here to help you.</p>
+        <header className="border-border mb-10 border-b pb-6">
+          <h1 className="text-3xl font-bold tracking-tight">Contact Us</h1>
+          <p className="mt-2 text-sm opacity-60">We're here to help you.</p>
         </header>
 
-        <main className="gap-12 grid grid-cols-1 md:grid-cols-2">
+        <main className="grid grid-cols-1 gap-12 md:grid-cols-2">
           {/* Form Side */}
           <div className="relative">
             {isSuccess && (
-              <div className="z-10 absolute inset-0 flex flex-col justify-center items-center bg-background/90 backdrop-blur-sm p-6 rounded-lg text-center animate-in duration-300 fade-in">
-                <CheckCircle2 className="mb-4 w-12 h-12 text-green-500" />
-                <h3 className="font-bold text-xl">Message Sent!</h3>
-                <p className="mt-2 text-muted-foreground text-sm">We'll get back to you shortly.</p>
+              <div className="bg-background/90 animate-in fade-in absolute inset-0 z-10 flex flex-col items-center justify-center rounded-lg p-6 text-center backdrop-blur-sm duration-300">
+                <CheckCircle2 className="mb-4 h-12 w-12 text-green-500" />
+                <h3 className="text-xl font-bold">Message Sent!</h3>
+                <p className="text-muted-foreground mt-2 text-sm">
+                  We'll get back to you shortly.
+                </p>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label className="opacity-60 font-bold text-xs uppercase tracking-widest">
+                  <label className="text-xs font-bold tracking-widest uppercase opacity-60">
                     Full Name
                   </label>
                   <input
@@ -93,11 +97,11 @@ const ContactUs = () => {
                     type="text"
                     name="name"
                     placeholder="Your Name"
-                    className="bg-muted/30 [-webkit-text-fill-color:inherit] autofill:[-webkit-text-fill-color:#000] dark:autofill:[-webkit-text-fill-color:#fff] p-3 border border-border rounded-lg outline-none focus:ring-1 focus:ring-primary w-full transition-all autofill:transition-[background-color] autofill:duration-[5000s] [selection:background-color:transparent]"
+                    className="bg-muted/30 border-border focus:ring-primary w-full rounded-lg border p-3 transition-all outline-none [-webkit-text-fill-color:inherit] [selection:background-color:transparent] autofill:transition-[background-color] autofill:duration-[5000s] autofill:[-webkit-text-fill-color:#000] focus:ring-1 dark:autofill:[-webkit-text-fill-color:#fff]"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="opacity-60 font-bold text-xs uppercase tracking-widest">
+                  <label className="text-xs font-bold tracking-widest uppercase opacity-60">
                     Email Address
                   </label>
                   <input
@@ -105,11 +109,11 @@ const ContactUs = () => {
                     type="email"
                     name="email"
                     placeholder="email@example.com"
-                    className="bg-muted/30 [-webkit-text-fill-color:inherit] autofill:[-webkit-text-fill-color:#000] dark:autofill:[-webkit-text-fill-color:#fff] p-3 border border-border rounded-lg outline-none focus:ring-1 focus:ring-primary w-full transition-all autofill:transition-[background-color] autofill:duration-[5000s] [selection:background-color:transparent]"
+                    className="bg-muted/30 border-border focus:ring-primary w-full rounded-lg border p-3 transition-all outline-none [-webkit-text-fill-color:inherit] [selection:background-color:transparent] autofill:transition-[background-color] autofill:duration-[5000s] autofill:[-webkit-text-fill-color:#000] focus:ring-1 dark:autofill:[-webkit-text-fill-color:#fff]"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="opacity-60 font-bold text-xs uppercase tracking-widest">
+                  <label className="text-xs font-bold tracking-widest uppercase opacity-60">
                     Message
                   </label>
                   <textarea
@@ -117,17 +121,17 @@ const ContactUs = () => {
                     name="message"
                     rows={4}
                     placeholder="How can we help?"
-                    className="bg-muted/30 [-webkit-text-fill-color:inherit] autofill:[-webkit-text-fill-color:#000] dark:autofill:[-webkit-text-fill-color:#fff] p-3 border border-border rounded-lg outline-none focus:ring-1 focus:ring-primary w-full transition-all autofill:transition-[background-color] autofill:duration-[5000s] resize-none [selection:background-color:transparent]"
+                    className="bg-muted/30 border-border focus:ring-primary w-full resize-none rounded-lg border p-3 transition-all outline-none [-webkit-text-fill-color:inherit] [selection:background-color:transparent] autofill:transition-[background-color] autofill:duration-[5000s] autofill:[-webkit-text-fill-color:#000] focus:ring-1 dark:autofill:[-webkit-text-fill-color:#fff]"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex justify-center items-center gap-2 bg-foreground hover:opacity-90 disabled:opacity-50 py-3 rounded-lg w-full font-bold text-background text-xs uppercase tracking-widest transition-opacity"
+                  className="bg-foreground text-background flex w-full items-center justify-center gap-2 rounded-lg py-3 text-xs font-bold tracking-widest uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>
-                      <Spinner className="w-4 h-4" /> Sending...
+                      <Spinner className="h-4 w-4" /> Sending...
                     </>
                   ) : (
                     "Send Message"
@@ -140,18 +144,24 @@ const ContactUs = () => {
           {/* Info Side */}
           <section className="space-y-8">
             <div className="space-y-6">
-              <h2 className="font-semibold text-primary text-xl">Quick Support</h2>
+              <h2 className="text-primary text-xl font-semibold">
+                Quick Support
+              </h2>
               <div className="space-y-4">
                 {/* Clickable Email Card */}
                 <a
                   href="mailto:kunal.codes24@gmail.com"
-                  className="group flex items-start gap-4 bg-muted/10 hover:bg-muted/20 p-4 border border-border hover:border-primary/50 rounded-lg transition-all"
+                  className="group bg-muted/10 hover:bg-muted/20 border-border hover:border-primary/50 flex items-start gap-4 rounded-lg border p-4 transition-all"
                 >
-                  <Mail className="mt-1 w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+                  <Mail className="text-primary mt-1 h-5 w-5 transition-transform group-hover:scale-110" />
                   <div>
-                    <h3 className="font-bold text-foreground text-sm">Email Us</h3>
-                    <p className="opacity-60 text-sm italic">kunal.codes24@gmail.com</p>
-                    <p className="mt-1 font-medium text-[10px] text-primary uppercase tracking-wider">
+                    <h3 className="text-foreground text-sm font-bold">
+                      Email Us
+                    </h3>
+                    <p className="text-sm italic opacity-60">
+                      kunal.codes24@gmail.com
+                    </p>
+                    <p className="text-primary mt-1 text-[10px] font-medium tracking-wider uppercase">
                       Click to send an email
                     </p>
                   </div>
@@ -159,9 +169,10 @@ const ContactUs = () => {
               </div>
             </div>
 
-            <div className="bg-muted/50 p-4 border-primary border-l-4 rounded-r-md">
-              <p className="opacity-80 text-sm italic">
-                <strong>Response Time:</strong> We usually respond within 24-48 hours.
+            <div className="bg-muted/50 border-primary rounded-r-md border-l-4 p-4">
+              <p className="text-sm italic opacity-80">
+                <strong>Response Time:</strong> We usually respond within 24-48
+                hours.
               </p>
             </div>
           </section>

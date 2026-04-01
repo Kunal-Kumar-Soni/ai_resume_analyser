@@ -1,21 +1,31 @@
 "use client";
-import { cn } from "@/lib/utils";
+import { useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
+import { MdOutlineVerifiedUser } from "react-icons/md";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { FcGoogle } from "react-icons/fc";
-import { Spinner } from "./ui/spinner";
-import { toast } from "sonner";
-import { supabaseClient } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
-import { MdOutlineVerifiedUser } from "react-icons/md";
 import { useAuth } from "@/hooks/useAuth";
-import { useEffect } from "react";
+import { supabaseClient } from "@/lib/supabaseClient";
+import { cn } from "@/lib/utils";
+
 import PageLoader from "./ui/custom-animated-loader";
-import { ArrowLeft } from "lucide-react";
+import { Spinner } from "./ui/spinner";
 
 type Inputs = {
   name: string;
@@ -24,7 +34,10 @@ type Inputs = {
   confirmPassword: string;
 };
 
-export function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
+export function SignupForm({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
   const {
     register,
     handleSubmit,
@@ -87,7 +100,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
       errors?.email?.message ||
         errors?.password?.message ||
         errors?.confirmPassword?.message ||
-        "Please fix the highlighted fields."
+        "Please fix the highlighted fields.",
     );
   };
 
@@ -125,40 +138,40 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
   return (
     <div
       className={cn(
-        "flex flex-col justify-center items-center my-6 md:my-0 px-4 sm:px-6 lg:px-8 w-full min-h-full",
-        className
+        "my-6 flex min-h-full w-full flex-col items-center justify-center px-4 sm:px-6 md:my-0 lg:px-8",
+        className,
       )}
       {...props}
     >
       {/* Clean Responsive Back Button */}
-      <div className="top-4 md:top-10 left-4 md:left-10 md:absolute mb-6 md:mb-0 w-full md:w-auto">
+      <div className="top-4 left-4 mb-6 w-full md:absolute md:top-10 md:left-10 md:mb-0 md:w-auto">
         <Link href="/">
-          <div className="group flex items-center gap-2 font-bold text-[10px] text-zinc-400 hover:text-black dark:hover:text-white uppercase tracking-[0.2em] transition-all">
-            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+          <div className="group flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] text-zinc-400 uppercase transition-all hover:text-black dark:hover:text-white">
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
             Back to Home
           </div>
         </Link>
       </div>
 
       {/* Branding Section */}
-      <div className="flex flex-col items-center gap-4 mb-4 w-full max-w-2xl text-center">
+      <div className="mb-4 flex w-full max-w-2xl flex-col items-center gap-4 text-center">
         <div className="group relative">
-          <div className="absolute -inset-1 bg-primary opacity-20 group-hover:opacity-40 rounded-2xl transition duration-1000 blur"></div>
+          <div className="bg-primary absolute -inset-1 rounded-2xl opacity-20 blur transition duration-1000 group-hover:opacity-40"></div>
         </div>
         <div className="space-y-1">
-          <h1 className="font-black text-foreground text-3xl sm:text-4xl italic">
+          <h1 className="text-foreground text-3xl font-black italic sm:text-4xl">
             RESUME<span className="text-primary not-italic">.AI</span>
           </h1>
-          <p className="font-medium text-muted-foreground text-xs sm:text-sm uppercase tracking-wide">
+          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase sm:text-sm">
             Smart Login for Smart Careers
           </p>
         </div>
       </div>
 
       {/* Main Card */}
-      <Card className="bg-background shadow-[0_1px_4px_rgba(0,0,0,0.08)] shadow-slate-200 dark:shadow-[0_1px_4px_rgba(0,0,0,0.4)] py-8 rounded-[2rem] w-full max-w-2xl overflow-hidden">
+      <Card className="bg-background w-full max-w-2xl overflow-hidden rounded-[2rem] py-8 shadow-[0_1px_4px_rgba(0,0,0,0.08)] shadow-slate-200 dark:shadow-[0_1px_4px_rgba(0,0,0,0.4)]">
         <CardHeader className="text-center">
-          <CardTitle className="font-black text-2xl sm:text-3xl tracking-tight">
+          <CardTitle className="text-2xl font-black tracking-tight sm:text-3xl">
             Create your account
           </CardTitle>
           <CardDescription className="font-medium">
@@ -167,35 +180,38 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
         </CardHeader>
 
         <CardContent className="">
-          <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
+          <form
+            onSubmit={handleSubmit(onSubmit, onError)}
+            className="space-y-6"
+          >
             <div className="space-y-4">
               {/* Google Button */}
               <Button
                 onClick={handleGoogleSignup}
                 variant="outline"
                 type="button"
-                className="group gap-4 bg-secondary/20 hover:bg-secondary/40 border-2 border-secondary hover:border-primary/30 rounded-2xl w-full h-14 transition-all duration-300"
+                className="group bg-secondary/20 hover:bg-secondary/40 border-secondary hover:border-primary/30 h-14 w-full gap-4 rounded-2xl border-2 transition-all duration-300"
               >
-                <FcGoogle className="w-6 h-6 group-hover:rotate-360 transition-transform duration-500" />
-                <span className="font-bold text-foreground text-sm sm:text-base">
+                <FcGoogle className="h-6 w-6 transition-transform duration-500 group-hover:rotate-360" />
+                <span className="text-foreground text-sm font-bold sm:text-base">
                   Login with Google
                 </span>
               </Button>
 
               {/* Compact Security Note */}
-              <div className="flex justify-center items-center gap-2 bg-emerald-50/50 dark:bg-emerald-500/5 mx-auto px-3 py-2 border border-emerald-500/10 rounded-xl w-full">
-                <MdOutlineVerifiedUser className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                <p className="font-medium text-[11px] text-emerald-700 dark:text-emerald-400 sm:text-sm leading-none">
+              <div className="mx-auto flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/10 bg-emerald-50/50 px-3 py-2 dark:bg-emerald-500/5">
+                <MdOutlineVerifiedUser className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                <p className="text-[11px] leading-none font-medium text-emerald-700 sm:text-sm dark:text-emerald-400">
                   Logging in with Google is more secure
                 </p>
               </div>
 
               <div className="relative my-8">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="border-muted-foreground/40 dark:border-muted-foreground/70 border-t w-full" />
+                  <span className="border-muted-foreground/40 dark:border-muted-foreground/70 w-full border-t" />
                 </div>
-                <div className="relative flex justify-center font-bold text-[10px] uppercase tracking-[0.3em]">
-                  <span className="bg-white dark:bg-background px-4 text-muted-foreground dark:text-muted-foreground/70">
+                <div className="relative flex justify-center text-[10px] font-bold tracking-[0.3em] uppercase">
+                  <span className="dark:bg-background text-muted-foreground dark:text-muted-foreground/70 bg-white px-4">
                     or continue with
                   </span>
                 </div>
@@ -206,7 +222,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                 <div className="space-y-2">
                   <FieldLabel
                     htmlFor="email"
-                    className="ml-1 font-bold text-[11px] text-muted-foreground uppercase"
+                    className="text-muted-foreground ml-1 text-[11px] font-bold uppercase"
                   >
                     Email
                   </FieldLabel>
@@ -214,16 +230,16 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                     id="email"
                     type="email"
                     placeholder="m@example.com"
-                    className="bg-secondary/30 [-webkit-text-fill-color:inherit] autofill:[-webkit-text-fill-color:#000] dark:autofill:[-webkit-text-fill-color:#fff] px-5 border-none rounded-2xl focus-visible:ring-2 focus-visible:ring-primary/20 h-14 font-medium autofill:transition-[background-color] autofill:duration-[5000s] [selection:background-color:transparent]"
+                    className="bg-secondary/30 focus-visible:ring-primary/20 h-14 rounded-2xl border-none px-5 font-medium [-webkit-text-fill-color:inherit] [selection:background-color:transparent] autofill:transition-[background-color] autofill:duration-[5000s] autofill:[-webkit-text-fill-color:#000] focus-visible:ring-2 dark:autofill:[-webkit-text-fill-color:#fff]"
                     {...register("email", { required: "Email is required" })}
                   />
                 </div>
 
-                <div className="gap-4 grid grid-cols-1 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
                     <FieldLabel
                       htmlFor="password"
-                      className="ml-1 font-bold text-[11px] text-muted-foreground uppercase"
+                      className="text-muted-foreground ml-1 text-[11px] font-bold uppercase"
                     >
                       Password
                     </FieldLabel>
@@ -231,10 +247,13 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                       id="password"
                       type="password"
                       placeholder="••••••••"
-                      className="bg-secondary/30 px-5 border-none rounded-2xl focus-visible:ring-2 focus-visible:ring-primary/20 h-14 font-medium"
+                      className="bg-secondary/30 focus-visible:ring-primary/20 h-14 rounded-2xl border-none px-5 font-medium focus-visible:ring-2"
                       {...register("password", {
                         required: true,
-                        minLength: { value: 8, message: "Password must be at least 8 characters" },
+                        minLength: {
+                          value: 8,
+                          message: "Password must be at least 8 characters",
+                        },
                       })}
                     />
                   </div>
@@ -242,7 +261,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                     <FieldLabel
                       htmlFor="confirm-password"
                       title="Confirm Password"
-                      className="block ml-1 font-bold text-[11px] text-muted-foreground truncate uppercase"
+                      className="text-muted-foreground ml-1 block truncate text-[11px] font-bold uppercase"
                     >
                       Confirm Password
                     </FieldLabel>
@@ -250,18 +269,19 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                       id="confirm-password"
                       type="password"
                       placeholder="••••••••"
-                      className="bg-secondary/30 px-5 border-none rounded-2xl focus-visible:ring-2 focus-visible:ring-primary/20 h-14 font-medium"
+                      className="bg-secondary/30 focus-visible:ring-primary/20 h-14 rounded-2xl border-none px-5 font-medium focus-visible:ring-2"
                       {...register("confirmPassword", {
                         required: true,
                         minLength: {
                           value: 8,
-                          message: "Confirm Password must be at least 8 characters",
+                          message:
+                            "Confirm Password must be at least 8 characters",
                         },
                       })}
                     />
                   </div>
                 </div>
-                <p className="ml-1 font-medium text-[10px] text-muted-foreground sm:text-xs">
+                <p className="text-muted-foreground ml-1 text-[10px] font-medium sm:text-xs">
                   Must be at least 8 characters long.
                 </p>
               </div>
@@ -272,16 +292,20 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
               <Button
                 disabled={isSubmitting}
                 type="submit"
-                className="shadow-primary/20 shadow-xl rounded-2xl w-full h-14 font-bold text-sm sm:text-base uppercase tracking-widest active:scale-[0.98] transition-all hover:-translate-y-1"
+                className="shadow-primary/20 h-14 w-full rounded-2xl text-sm font-bold tracking-widest uppercase shadow-xl transition-all hover:-translate-y-1 active:scale-[0.98] sm:text-base"
               >
-                {isSubmitting ? <Spinner className="w-6 h-6" /> : "Create Account"}
+                {isSubmitting ? (
+                  <Spinner className="h-6 w-6" />
+                ) : (
+                  "Create Account"
+                )}
               </Button>
 
-              <p className="font-medium text-muted-foreground text-sm text-center">
+              <p className="text-muted-foreground text-center text-sm font-medium">
                 Already have an account?{" "}
                 <Link
                   href="signin"
-                  className="font-black text-foreground hover:text-primary decoration-primary/20 hover:decoration-primary underline underline-offset-8 transition-colors"
+                  className="text-foreground hover:text-primary decoration-primary/20 hover:decoration-primary font-black underline underline-offset-8 transition-colors"
                 >
                   Sign in
                 </Link>
