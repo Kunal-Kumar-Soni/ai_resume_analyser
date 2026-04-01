@@ -56,8 +56,8 @@ const TermsAndConditions = () => {
 
           <section className="rounded-r-xl border-l-4 border-zinc-900 bg-zinc-50 p-6 transition-all dark:border-zinc-100 dark:bg-zinc-900/50">
             <p className="text-base font-bold text-zinc-800 italic sm:text-lg dark:text-zinc-200">
-              Note: Our AI advisor provides "recommendations" based on common
-              ATS patterns. Use them as a guide to supplement your own
+              Note: Our AI advisor provides &quot;recommendations&quot; based on
+              common ATS patterns. Use them as a guide to supplement your own
               professional judgment.
             </p>
           </section>

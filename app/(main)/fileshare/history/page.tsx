@@ -468,9 +468,9 @@ const Page = () => {
                         This will permanently remove{" "}
                         {/* Highlighted text: Light mode mein black, Dark mode mein white */}
                         <span className="font-semibold text-slate-900 dark:text-zinc-100">
-                          "{getSingleData?.title || "this resume"}"
+                          &quot;{getSingleData?.title || "this resume"}&quot;
                         </span>{" "}
-                        You won't be able to recover this resume data.
+                        You won&apos;t be able to recover this resume data.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
 

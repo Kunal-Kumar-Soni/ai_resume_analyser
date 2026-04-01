@@ -68,8 +68,8 @@ const Hero = () => {
               </h1>
 
               <p className="text-muted-foreground max-w-2xl text-lg leading-relaxed font-medium italic md:text-xl">
-                "Stop sending generic resumes. Get AI-powered feedback to fix
-                gaps and align with any job description instantly."
+                &quot;Stop sending generic resumes. Get AI-powered feedback to
+                fix gaps and align with any job description instantly.&quot;
               </p>
             </div>
 
@@ -165,8 +165,8 @@ const Hero = () => {
                         Keyword Missing
                       </p>
                       <p className="text-xs font-medium text-zinc-600 italic sm:text-sm dark:text-zinc-400">
-                        "The JD mentions 'Cloud Architecture'. Ensure this is
-                        listed in your Core Skills."
+                        &quot;The JD mentions &apos;Cloud Architecture&apos;.
+                        Ensure this is listed in your Core Skills.&quot;
                       </p>
                     </div>
                   </div>

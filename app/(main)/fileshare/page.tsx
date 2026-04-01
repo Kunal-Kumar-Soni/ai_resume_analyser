@@ -107,8 +107,10 @@ const PDFUploadSleek = () => {
     setExtractedText("");
   };
 
-  let cleanName = file?.name.replace(/\.[^/.]+$/, "") || "Untitled";
-  let finalTitle = cleanName.endsWith(".pdf") ? cleanName : `${cleanName}.pdf`;
+  const cleanName = file?.name.replace(/\.[^/.]+$/, "") || "Untitled";
+  const finalTitle = cleanName.endsWith(".pdf")
+    ? cleanName
+    : `${cleanName}.pdf`;
 
   // Execute Analysis with Model Switching
   const handleExecuteAnalysis = async () => {

@@ -55,10 +55,11 @@ const PrivacyPolicy = () => {
               2. No AI Training Policy
             </h2>
             <p className="text-base opacity-80">
-              We strictly follow a "No Training" policy. Your uploaded resumes
-              and professional data are <strong>never used to train</strong>{" "}
-              public AI models. Data is processed in a transient state solely to
-              generate your ATS score and suggestions.
+              We strictly follow a No &quot;Training&quot; policy. Your uploaded
+              resumes and professional data are{" "}
+              <strong>never used to train</strong> public AI models. Data is
+              processed in a transient state solely to generate your ATS score
+              and suggestions.
             </p>
           </section>
 

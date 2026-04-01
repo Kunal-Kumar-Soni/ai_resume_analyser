@@ -70,7 +70,9 @@ const ContactUs = () => {
         {/* Header */}
         <header className="border-border mb-10 border-b pb-6">
           <h1 className="text-3xl font-bold tracking-tight">Contact Us</h1>
-          <p className="mt-2 text-sm opacity-60">We're here to help you.</p>
+          <p className="mt-2 text-sm opacity-60">
+            We&apos;re here to help you.
+          </p>
         </header>
 
         <main className="grid grid-cols-1 gap-12 md:grid-cols-2">
@@ -81,7 +83,7 @@ const ContactUs = () => {
                 <CheckCircle2 className="mb-4 h-12 w-12 text-green-500" />
                 <h3 className="text-xl font-bold">Message Sent!</h3>
                 <p className="text-muted-foreground mt-2 text-sm">
-                  We'll get back to you shortly.
+                  We&apos;ll get back to you shortly.
                 </p>
               </div>
             )}

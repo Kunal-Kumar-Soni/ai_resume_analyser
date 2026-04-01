@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { cn } from "@/lib/utils";
 
 import { Marquee } from "../ui/marquee";
@@ -57,9 +59,15 @@ const ReviewCard = ({
         "dark:bg-card/70 dark:border-gray-50/10 dark:hover:bg-gray-50/8",
       )}
     >
-      <blockquote className="mb-6 text-sm">"{body}"</blockquote>
+      <blockquote className="mb-6 text-sm">&quot;{body}&quot;</blockquote>
       <div className="flex flex-row items-center gap-2">
-        <img className="rounded-full" width="32" height="32" alt="" src={img} />
+        <Image
+          className="rounded-full"
+          width="32"
+          height="32"
+          alt=""
+          src={img}
+        />
         <div className="flex flex-col">
           <figcaption className="text-sm font-medium dark:text-white">
             {name}

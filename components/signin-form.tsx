@@ -273,7 +273,7 @@ export function SigninForm({
 
           <div className="mt-8 text-center">
             <p className="text-muted-foreground text-sm font-medium">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link
                 href="signup"
                 className="text-foreground hover:text-primary decoration-primary/20 hover:decoration-primary font-black underline underline-offset-8 transition-colors"
