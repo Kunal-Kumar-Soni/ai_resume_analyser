@@ -14,8 +14,6 @@ AI-Powered Resume Analysis & ATS Scoring Platform
 Resume.ai is a modern web application that helps users analyze, optimize, and improve their resumes using AI-generated insights **along with an ATS (Applicant Tracking System) score**.  
 The platform is designed to simulate how real recruiters and ATS systems evaluate resumes.
 
-This project focuses on **real-world usability**, **clean frontend architecture**, and **professional UI/UX**, making it suitable for production-level applications and a strong frontend project.
-
 ---
 
 ## Features
