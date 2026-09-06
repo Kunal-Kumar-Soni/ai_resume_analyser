@@ -50,18 +50,6 @@ The platform is designed to simulate how real recruiters and ATS systems evaluat
 - Allows users to **listen to resume analysis**
 - Improves accessibility and user experience
 
-### UI / UX
-
-- Clean, minimal, and modern interface
-- Fully responsive for all screen sizes
-- Dark and Light mode support
-
-### Error Handling
-
-- Custom toast notifications
-- Friendly, user-readable error messages
-- Proper loading, empty, and error states
-
 ---
 
 ## Tech Stack
