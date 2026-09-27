@@ -35,10 +35,10 @@ type getDataType = {
   model_selection: string;
   result: string;
   user_id: string;
-}[];
+};
 
 const Page = () => {
-  const [getAllData, setGetAllData] = useState<getDataType | null>(null);
+  const [getAllData, setGetAllData] = useState<getDataType[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [activeId, setActiveId] = useState<number | null>(null);
   const resultSectionRef = useRef<HTMLDivElement>(null);
@@ -90,7 +90,7 @@ const Page = () => {
       }
 
       if (allData && allData.length > 0) {
-        setGetAllData(allData);
+        setGetAllData(allData as getDataType[]);
         // Auto-select first item if none selected
         if (activeId === null) {
           setActiveId(allData[0].id);
