@@ -98,7 +98,6 @@ The platform is designed to simulate how real recruiters and ATS systems evaluat
 │   ├── supabaseClient.ts
 │   └── utils.ts
 ├── public/
-├── .env.local
 └── README.md
 ```
 
