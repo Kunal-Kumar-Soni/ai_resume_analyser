@@ -59,7 +59,7 @@ The platform is designed to simulate how real recruiters and ATS systems evaluat
 - Next.js
 - TypeScript
 - Tailwind CSS
-- Shadcn UI / Magic UI
+- Shadcn UI
 
 ### Backend & Services
 
